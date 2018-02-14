@@ -1,0 +1,5 @@
+The Maven build will copy the Jackson JAR's into a "lib" subdir of "target",
+and add them to the classpath in the JAR manifest so that it can be run with:
+
+  $ java -jar target/johansteyn-jackson.jar
+

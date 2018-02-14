@@ -1,0 +1,90 @@
+======= 1000 =======
+4235 milliseconds
+4239 milliseconds
+4485 milliseconds
+------------
+2492 milliseconds
+2316 milliseconds
+2326 milliseconds
+------------
+3023 milliseconds
+2763 milliseconds
+2631 milliseconds
+======= 2000 =======
+37903 milliseconds
+37927 milliseconds
+38053 milliseconds
+------------
+17595 milliseconds
+17813 milliseconds
+17835 milliseconds
+------------
+19043 milliseconds
+19757 milliseconds
+19510 milliseconds
+======= 3000 =======
+144067 milliseconds
+147362 milliseconds
+144959 milliseconds
+------------
+68551 milliseconds
+72408 milliseconds
+73545 milliseconds
+------------
+73965 milliseconds
+73729 milliseconds
+75009 milliseconds
+======= 4000 =======
+383912 milliseconds
+381136 milliseconds
+382683 milliseconds
+------------
+184585 milliseconds
+191151 milliseconds
+188274 milliseconds
+------------
+192866 milliseconds
+194533 milliseconds
+189923 milliseconds
+======= 5000 =======
+819631 milliseconds
+816550 milliseconds
+820285 milliseconds
+------------
+390901 milliseconds
+400306 milliseconds
+391085 milliseconds
+------------
+393596 milliseconds
+403113 milliseconds
+410444 milliseconds
+======= 6000 =======
+1536743 milliseconds
+1551137 milliseconds
+1546785 milliseconds
+------------
+722780 milliseconds
+733941 milliseconds
+729024 milliseconds
+------------
+737736 milliseconds
+731265 milliseconds
+723929 milliseconds
+======= 7000 =======
+2617788 milliseconds
+2638890 milliseconds
+2616132 milliseconds
+------------
+1160100 milliseconds
+1188466 milliseconds
+1193928 milliseconds
+------------
+1221810 milliseconds
+1202489 milliseconds
+1206094 milliseconds
+======= 8000 =======
+4189475 milliseconds
+4145593 milliseconds
+4137564 milliseconds
+------------
+

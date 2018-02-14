@@ -1,0 +1,4 @@
+logger3: This message should appear in the file.
+logger4: This message should also appear in the file - even though the trait extends ConsoleLogger.
+2017-09-27T15:53:24.454Z logger6: Yet this message appears in the file, even though the trait extends ConsoleLogger!
+logger7: This message appears in the file, but only after overriding the 'log' method.

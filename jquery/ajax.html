@@ -1,0 +1,35 @@
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script>
+	$(function(){
+		var self = this;
+		$("#b1").click(function() {
+			console.log("Clicked (b1)");
+			$.ajax({
+				url: "http://awptgmtv40.us.oracle.com:7023/cs-api/v1/orchestrations?orchestration_id=2802&instance_id=3049341", 
+				success: function(result) {
+					console.log("Success");
+					console.log(result);
+					var content = "<pre>" + JSON.stringify(result, null, 2) + "</pre>";
+					self.xxx = $("p").html();
+					$("p").html(content);
+				}
+			});
+		});
+		$("#b2").click(function() {
+			console.log("Clicked (b2)");
+			$("p").html(self.xxx);
+		});
+	});
+	</script>
+</head>
+
+<body>
+	<button id="b1">Modify</button>
+	<button id="b2">Reset</button>
+	<p>This paragraph will be changed by the contents from a jQuery ajax call...</p>
+</body>
+
+</html>
+

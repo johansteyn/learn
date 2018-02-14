@@ -1,0 +1,95 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.math.BigInteger;
+
+import akka.actor.AbstractActor;
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import akka.actor.Props;
+
+public class AkkaFibonacci extends AbstractActor {
+	static ActorSystem actorSystem = ActorSystem.create("system");
+	static int number;
+	static int counted;
+	static int calculated;
+	static long start;
+//	static List<ActorRef> actorRefs = new ArrayList<ActorRef>();
+
+	public static void main(String[] args) {
+		number = Integer.parseInt(args[0]);
+		start = System.currentTimeMillis();
+		for (int i = 1; i <= number; i++) {
+		 	ActorRef actorRef = actorSystem.actorOf(AkkaFibonacci.props(), "f" + i);
+//			actorRefs.add(actorRef);
+			actorRef.tell(new AkkaFibonacci.Calculate(i), actorRef);
+		}
+	}
+
+	public static class Calculate {
+		int nth;
+
+		public Calculate(int nth) {
+			this.nth = nth;
+		}
+	}
+
+	public static class Done {
+	}
+
+	public static Props props() {
+		return Props.create(AkkaFibonacci.class);
+	}
+
+	@Override
+	public Receive createReceive() {
+		return receiveBuilder()
+			.match(Calculate.class, this::calculate)
+			.match(Done.class, this::done)
+			.build();
+		}
+
+	private void calculate(Calculate calculate) {
+		Fibonacci.calculate(calculate.nth);
+//		counted++;
+		count();
+		if (counted > (number - 10)) {
+			System.out.println("counted=" + counted + ", number=" + number);
+		}
+		if (counted == number) {
+//			// We're done
+//			long end = System.currentTimeMillis();
+//			System.out.println("" + (end - start) + " milliseconds");
+//			actorSystem.terminate();
+System.out.println("Are we really done..?");
+		}
+		sender().tell(new AkkaFibonacci.Done(), self());
+	}
+
+	private void done(Done done) {
+//		calculated++;
+		increment();
+		if (calculated > (number - 10)) {
+//			System.out.println("calculated=" + calculated + ", number=" + number + " actors=" + actorRefs.size());
+			System.out.println("calculated=" + calculated + ", number=" + number);
+		}
+		if (calculated == number) {
+//		actorRefs.remove(sender());
+//		if (actorRefs.size() <= 0) {
+//		actorRefs.add(sender());
+//		if (actorRefs.size() >= number) {
+			// We're done
+			long end = System.currentTimeMillis();
+			System.out.println("" + (end - start) + " milliseconds");
+			actorSystem.terminate();
+		}
+	}
+
+	static synchronized void count() {
+		counted++;
+	}
+
+	static synchronized void increment() {
+		calculated++;
+	}
+}
+
