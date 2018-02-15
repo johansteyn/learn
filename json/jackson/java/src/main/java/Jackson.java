@@ -5,16 +5,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Jackson {
 	public static void main(String[] args) throws IOException {
-		ObjectMapper objectMapper = new ObjectMapper();
+		ObjectMapper mapper = new ObjectMapper();
 
-		String string = "{ \"brand\" : \"Mercedes\", \"doors\" : 5 }";
+		String carString = "{ \"brand\" : \"Mercedes\", \"doors\" : 5 }";
 		// NOTE: Using a string for the doors works the same...
-		//String string = "{ \"brand\" : \"Mercedes\", \"doors\" : \"5\" }";
-		Car car = objectMapper.readValue(string, Car.class);
+		//String carString = "{ \"brand\" : \"Mercedes\", \"doors\" : \"5\" }";
+		Car car = mapper.readValue(carString, Car.class);
 		System.out.println("" + car);
 
-		string = "{\"status\":200, \"data\": {\"decodingTime\":10, \"translation\":\"hello\", \"sourceWordcount\":1, \"targetWordcount\":1}}";
-		ModernMT modern = objectMapper.readValue(string, ModernMT.class);
+		String modernString = "{\"status\":200, \"data\": {\"decodingTime\":10, \"translation\":\"hello\", \"sourceWordcount\":1, \"targetWordcount\":1}}";
+		ModernMT modern = mapper.readValue(modernString, ModernMT.class);
 		System.out.println("" + modern);
 	}
 }
@@ -41,11 +41,7 @@ class Car {
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Car: brand=");
-		sb.append(brand);
-		sb.append(", doors=");
-		sb.append(doors);
-		return sb.toString();
+		return sb.append("Car: brand=").append(brand).append(", doors=").append(doors).toString();	
 	}
 }
 
@@ -71,11 +67,7 @@ class ModernMT {
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("ModernMT: status=");
-		sb.append(status);
-		sb.append(", data=");
-		sb.append(data);
-		return sb.toString();
+		return sb.append("ModernMT: status=").append(status).append(", data=").append(data).toString();
 	}
 }
 
@@ -119,14 +111,6 @@ class Data {
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Data: decodingTime=");
-		sb.append(decodingTime);
-		sb.append(", translation=");
-		sb.append(translation);
-		sb.append(", sourceWordcount=");
-		sb.append(sourceWordcount);
-		sb.append(", targetWordcount=");
-		sb.append(targetWordcount);
-		return sb.toString();
+		return sb.append("Data: decodingTime=").append(decodingTime).append(", translation=").append(translation).append(", sourceWordcount=").append(sourceWordcount).append(", targetWordcount=").append(targetWordcount).toString();
 	}
 }

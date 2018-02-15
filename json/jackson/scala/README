@@ -1,3 +1,30 @@
-TODO: Scala implementation, using annotations for Java Beans
+Scala implementation, using annotations for Java Beans
       https://alvinalexander.com/scala/scala-javabeans-beanproperty-annotation
+
+Clean:
+
+  $ rm -rf project target
+
+Before building:
+
+  $ mkdir project
+  $ cp assembly.sbt project
+
+Build JAR (classes only):
+
+  $ sbt package
+
+NOTE: This won't run as the dependent JARs are not present
+
+Build JAR (with all dependent JARs):
+
+  $ sbt assembly
+
+Run:
+
+  $ scala target/scala-2.12/johansteyn-jackson-scala.jar
+
+  or
+
+  $ java -jar target/scala-2.12/johansteyn-jackson-scala.jar
 
