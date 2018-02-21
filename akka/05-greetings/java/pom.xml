@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>johan</groupId>
-	<artifactId>pingpong</artifactId>
+	<artifactId>greetings</artifactId>
 	<version>1.0</version>
 
 	<dependencies>
@@ -47,7 +47,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>PingPong</mainClass>
+							<mainClass>Greetings</mainClass>
 							<!-- Make sure the JARs in the "lib" dir are specified on the classpath -->
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib</classpathPrefix>

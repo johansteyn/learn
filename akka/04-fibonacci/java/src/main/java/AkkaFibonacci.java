@@ -7,6 +7,8 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 
+// Unlike the MultiFibonacci, we don't have direct control over the thread pool size,
+// which is controlled by the default dispatcher, and is configurable.
 public class AkkaFibonacci extends AbstractActor {
 	static ActorSystem actorSystem = ActorSystem.create("system");
 	static int number;

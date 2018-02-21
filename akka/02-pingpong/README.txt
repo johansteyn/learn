@@ -16,8 +16,19 @@ Build & package with Maven, and run with Java on the command line:
 Scala
 =====
 
-Build and run with SBT:
+Build JAR (with all dependent JARs):
 
-  $ sbt run
+  $ mkdir project
+  $ cp assembly.sbt project
+  $ sbt assembly
+
+Run:
+
+  $ scala target/scala-2.12/pingpong.jar
+
+  or
+
+  $ java -jar target/scala-2.12/pingpong.jar
+
 
 
