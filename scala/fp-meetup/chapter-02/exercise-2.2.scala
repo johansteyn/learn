@@ -1,5 +1,6 @@
 object O extends App {
 
+// Implemented using a for loop
 //	def isSorted[A](as: Array[A], ordered: (A, A) => Boolean): Boolean = {
 //		for (i <- 0 until as.length - 1) {
 //			val a = as(i)
@@ -9,9 +10,12 @@ object O extends App {
 //		true
 //	}
 
+// Implemented using a match expression
 	def isSorted[A](as: Array[A], ordered: (A, A) => Boolean): Boolean = {
 		as.toList match {
-//			case first :: second :: _ => if (!ordered(first, second)) false else isSorted(as.tail, ordered)
+			// Using an if expression
+			//case first :: second :: _ => if (!ordered(first, second)) false else isSorted(as.tail, ordered)
+			// Using logical AND, where the first part is always evaluated, and the second is only evaluated if the first is true. 
 			case first :: second :: _ => ordered(first, second) && isSorted(as.tail, ordered)
 			case _ => true
 		}
