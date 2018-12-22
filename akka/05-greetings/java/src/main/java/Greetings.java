@@ -37,13 +37,15 @@ public class Greetings {
 		helloGreeter.tell(new Greeter.Greet(), ActorRef.noSender());
 		for (int i = 0; i < NUMBER; i++) {
 			// We also expect a greeting to #666 to fail...
-			helloGreeter.tell(new Greeter.SetName("#" + i), ActorRef.noSender());
+			helloGreeter.tell(new Greeter.SetName("hello#" + i), ActorRef.noSender());
 			helloGreeter.tell(new Greeter.Greet(), ActorRef.noSender());
+			howdyGreeter.tell(new Greeter.SetName("howdy#" + i), ActorRef.noSender());
+			howdyGreeter.tell(new Greeter.Greet(), ActorRef.noSender());
 		}
 		howdyGreeter.tell(new Greeter.SetName("Zebra"), ActorRef.noSender());
 		howdyGreeter.tell(new Greeter.Greet(), ActorRef.noSender());
 		// Don't terminate until all the work is done (ie. all greetings have been made)
-		while (count < NUMBER - 1 + 6) {
+		while (count < 6 - 1 + 2 * (NUMBER - 1) + 1) {
 			try {
 				Thread.sleep(200);
 			} catch (InterruptedException ie) {
@@ -127,7 +129,8 @@ class Greeter extends AbstractActor {
 			// Lazily create printer as and when needed
 			printer = getContext().actorOf(Printer.props(), "printer");
 		}
-		if ("Dave".equals(name) || "#666".equals(name)) {
+		//if ("Dave".equals(name) || "#666".equals(name)) {
+		if ("Dave".equals(name) || name.indexOf("#666") >= 0) {
 			printer.tell(new Printer.Fail(), getSelf());
 		} else {
 			printer.tell(new Printer.Print(greeting + ", " + name), getSelf());
