@@ -1,0 +1,10 @@
+https://www.linkedin.com/pulse/rdd-datarame-datasets-apache-spark-shahzad-aslam
+
+Build:
+
+  $ sbt clean package
+
+Run:
+
+  $ spark-submit target/scala-2.11/spark-linkedin_2.11-1.0.jar
+

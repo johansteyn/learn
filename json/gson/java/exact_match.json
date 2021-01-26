@@ -1,0 +1,20 @@
+[
+  {
+    "compItemId":"B071KK3YM4",
+    "url":"https://www.amazon.com/COUNT-Disposable-Square-Compostable-Plates/dp/B071KK3YM4?psc=1",
+    "verificationRequired":0,
+    "primaryMatch":1,
+    "pipeline":"Manual",
+    "matchStatus":"ACTIVE",
+    "created_at":"Sep 6, 2019 11:49:53 AM",
+    "updated_at":"Sep 6, 2019 11:49:53 AM",
+    "miscAttributes":
+      {
+        "conversion_factor":"1",
+        "is_exact_match":"true",
+        "source":"MST"
+      },
+    "isLikeMatch":false
+  }
+]
+

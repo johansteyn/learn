@@ -1,0 +1,28 @@
+[
+  {
+    "compItemId":"B0078SYP2Q",
+    "url":"https://www.amazon.com/Betty-Crocker-Super-Triple-Chocolate/dp/B0078SYP2Q?psc=1",
+    "algoScore":
+      [
+        {
+          "algoName":"TITLE_SEARCH",
+          "score":"0",
+          "modelName":"rule_based_response"
+        }
+      ],
+    "verificationRequired":1,
+    "primaryMatch":0,
+    "pipeline":"Regular",
+    "matchStatus":"INACTIVE",
+    "created_at":"Dec 5, 2018 9:49:08 AM",
+    "updated_at":"Dec 5, 2018 9:49:08 AM",
+    "miscAttributes":
+      {
+        "is_exact_match":"true",
+        "competitor_bundle_qty":"12",
+        "walmart_bundle_qty":"12"
+      }
+  }
+]
+
+
