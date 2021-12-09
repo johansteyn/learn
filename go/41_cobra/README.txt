@@ -1,6 +1,6 @@
 https://github.com/spf13/cobra
 
-Using Cobra to develop a simple "lfs" program to run filesystem commands, such as:
+Using Cobra to develop a simple (mock) "fs" program to run filesystem commands, such as:
 
   - List the contents of directories
   - Create new directories
