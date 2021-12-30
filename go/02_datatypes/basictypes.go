@@ -8,9 +8,11 @@ import (
 func main() {
 	fmt.Println("Basic Data Types")
 
-	// The standard way to declare variables is with the "var" keyword, 
+	// Four kinds of declarations: var, const, type and func
+	// The standard way to declare variables is with "var",
 	// followed by the variable name, then the type.
 	// A value may optionally be assigned.
+	// If a value is assigned the the type is optional (it will be inferred)
 	// If no value is assigned, the variable will get its default nil value (based on type)
 
 	// Integers
@@ -48,8 +50,13 @@ func main() {
 	fmt.Printf("million=%d (%T)\n", million, million)
 
 	// Short declaration form - the "var" keyword and type are omitted and a value is assigned with :=
+	// Note that := is a declaration, whereas = is an assignment (but see exception below)
 	n := 1_234_567
 	fmt.Printf("n=%d (%T)\n", n, n)
+	// The "new" function can be used to assign the default nil value with the short declaration form
+	// But note that it returns a pointer...
+	o := new(int)
+	fmt.Printf("o=%d (%T)\n", *o, *o)
 	// Note that the short declaration form does not work outside of functions
 	// For idiomatic Go, avoid the short declaration form:
 	// - When initializing a variable to its zero value
@@ -140,6 +147,8 @@ func main() {
 	fmt.Printf("x=%d (%T)\n", x, x)
 	fmt.Printf("y=%d (%T)\n", y, y)
 	// But be careful... at least one variable must be new, which means the others could "shadow" previous declarations
+	// ie. the new variables are being declared, whereas the existing variables are assigned new values.
+	// Therefore, in this case, := is used to both declare and assign.
 	x, y, z := 987, 654, 321
 	fmt.Printf("x=%d (%T)\n", x, x)
 	fmt.Printf("y=%d (%T)\n", y, y)
@@ -217,4 +226,38 @@ func main() {
 	// This is mainly because all members that start with an uppercase letter are public.
 	const MAX_TEMP = 100 // Don't use
 	const maxTemp = 100  // Rather use camelCase
+
+	// Types
+	// A type declaration defines a new named type for an existing underlying type
+	// Form: type <name> <underlying-type>
+	// Types are usually declared at package level (see below)
+	var freezingC celsius = 0
+	var freezingF fahrenheit = 32
+	// Cannot compare values of different types, even if their underlying types are the same
+	//if freezingC == freezingF {
+	// But can do a type conversion if their underlying types are the same
+	var convertedF = fahrenheit(freezingC)
+	fmt.Printf("convertedF = %d\n", convertedF)
+	if freezingF == convertedF {
+		fmt.Printf("%d Fahrenheit == %d Celsius\n", freezingF, freezingC)
+	} else {
+		fmt.Printf("%d Fahrenheit != %d Celsius\n", freezingF, freezingC)
+	}
+	// But that's not what we really want...
+	// We want to call a proper conversion function that calculates the correct value
+	var calculatedF = celsiusToFahrenheit(freezingC)
+	fmt.Printf("calculatedF = %d\n", calculatedF)
+	if freezingF == calculatedF {
+		fmt.Printf("%d Fahrenheit == %d Celsius\n", freezingF, freezingC)
+	} else {
+		fmt.Printf("%d Celsius != %d Fahrenheit\n", freezingF, freezingC)
+	}
+
 }
+
+type celsius int
+type fahrenheit int
+func celsiusToFahrenheit (c celsius) fahrenheit {
+	return fahrenheit(c * 9 / 5 + 32)
+}
+

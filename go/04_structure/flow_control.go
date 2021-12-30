@@ -101,6 +101,57 @@ func main() {
 	fmt.Println()
 
 	// 4. Range
+	evens := []int{2, 4, 6, 8, 10, 12}
+	// Note that range returns 2 values: the index and the value at that index
+	for i, even := range evens {
+		fmt.Printf("#%d:%d\n", i, even)
+	}
+	fmt.Println()
+	// To ignore the index, use an underscore
+	for _, even := range evens {
+		fmt.Printf("%d ", even)
+	}
+	fmt.Println()
+	// NOTE: It uses a copy of the value - not the value itself 
+	fmt.Print("Modified values: ")
+	for _, even := range evens {
+		even /= 2
+		fmt.Printf("%d ", even)
+	}
+	fmt.Println()
+	// So, the original values are still the same
+	fmt.Print("Original values: ")
+	fmt.Println(evens)
+	// To ignore the value, simply leave it out
+	for i := range evens {
+		fmt.Printf("%d ", i)
+	}
+	fmt.Println()
+	// Range can also be used to iterate over maps
+	students := map[string]int{
+		"Alice": 21,
+		"Bob": 65,
+		"Carol": 42,
+	}
+	for name, age := range students {
+		fmt.Printf("%s is %d years old\n", name, age)
+	}
+	fmt.Println()
+	// Note that the order is random
+	// And if we loop a second time, the order will most likely be different
+	for name, age := range students {
+		fmt.Printf("%s is %d years old\n", name, age)
+	}
+	fmt.Println()
+	// Looping over strings
+	applepie := "Apple π"
+	// The string consists of 7 runes, which span 8 bytes
+	// The built-in "len" function returns the length in bytes
+	fmt.Printf("%s has length %d\n", applepie, len(applepie))
+	// But using range it loops over the runes
+	for i, r := range applepie {
+		fmt.Printf("#%d:%c\n", i, r)
+	}
 
 	// Goto
 	// TODO...

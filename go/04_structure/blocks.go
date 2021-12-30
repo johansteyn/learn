@@ -8,6 +8,7 @@ import (
 
 // Anything declared outside of a fuction is in the "package" block
 // ie. it has scope across all files in the same package
+var number *int
 const freezingTemp = 0
 const boilingTemp = 100
 
@@ -48,3 +49,21 @@ func main() {
 	// To run:
 	//   % shadow <file.go>
 }
+
+// Note that the scope of a variable is not the same as its lifetime...
+// A variable can be created on the stack or on the heap.
+// A stack variable has a lifetime equal to its scope,
+// but a heap variable has a lifetime beyond its scope.
+// In foo the variable x has local scope and lifetime
+// But in bar variable x has local scope but it "escapes" its scope to live beyond it.
+
+func foo() int {
+	x := 7 // x is created on the stack and does not live beyond function foo
+	return x
+}
+
+func bar() {
+	x := 12 // x is created on the heap, because it escape function bar
+	number = &x
+}
+
