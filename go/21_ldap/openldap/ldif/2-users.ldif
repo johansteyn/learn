@@ -1,0 +1,12 @@
+dn: uid=johan,ou=users,dc=foo,dc=com
+uid: johan
+objectClass: top
+objectClass: account
+
+# Commas need to be escaped with either \, or \2C
+# Asterisks do not need to be escaped
+dn: uid=johan\,frederik\2Csteyn*,ou=users,dc=foo,dc=com
+uid: johan\,frederik\2Csteyn*
+objectClass: top
+objectClass: account
+

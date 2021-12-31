@@ -1,0 +1,5 @@
+dn: dc=foo,dc=com
+dc: foo
+objectClass: top
+objectClass: domain
+

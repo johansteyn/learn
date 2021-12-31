@@ -1,0 +1,10 @@
+dn: ou=users,dc=foo,dc=com
+ou: users
+objectClass: top
+objectClass: organizationalUnit
+
+dn: ou=groups,dc=foo,dc=com
+ou: groups
+objectClass: top
+objectClass: organizationalUnit
+

@@ -1,0 +1,30 @@
+dn: cn=groupA,ou=groups,dc=foo,dc=com
+changetype: add
+cn: groupA
+objectClass: top
+objectClass: groupOfUniqueNames
+uniqueMember: uid=johan,ou=users,dc=foo,dc=com
+
+dn: cn=groupB,ou=groups,dc=foo,dc=com
+changetype: add
+cn: groupB
+objectClass: top
+objectClass: groupOfUniqueNames
+uniqueMember: uid=johan,ou=users,dc=foo,dc=com
+
+dn: cn=groupB,ou=groups,dc=foo,dc=com
+changetype: modify
+add: uniqueMember
+uniqueMember: cn=groupA,ou=groups,dc=foo,dc=com
+
+dn: cn=groupA,ou=groups,dc=foo,dc=com
+changetype: modify
+add: uniqueMember
+uniqueMember: uid=johan\,frederik\,steyn*,ou=users,dc=foo,dc=com
+
+dn: cn=groupB,ou=groups,dc=foo,dc=com
+changetype: modify
+add: uniqueMember
+uniqueMember: uid=johan\2Cfrederik\2csteyn*,ou=users,dc=foo,dc=com
+
+

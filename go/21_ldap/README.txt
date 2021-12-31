@@ -7,3 +7,9 @@ https://dev.to/openlab/ldap-authentication-in-golang-with-bind-and-search-47h5
 % go mod init 21_ldap
 % go mod tidy
 
+OpenLDAP
+--------
+
+% make fresh
+
+
