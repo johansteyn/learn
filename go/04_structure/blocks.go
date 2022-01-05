@@ -8,7 +8,6 @@ import (
 
 // Anything declared outside of a fuction is in the "package" block
 // ie. it has scope across all files in the same package
-var number *int
 const freezingTemp = 0
 const boilingTemp = 100
 
@@ -62,8 +61,8 @@ func foo() int {
 	return x
 }
 
-func bar() {
-	x := 12 // x is created on the heap, because it escape function bar
-	number = &x
+func bar() *int {
+	x := 12 // x is created on the heap, because it escapes function bar
+	return &x
 }
 
