@@ -6,6 +6,7 @@ import (
 
 func main() {
 	fmt.Println("Arrays and Slices")
+	fmt.Println()
 
   // Arrays
 	// All elements must be of the same type
@@ -17,6 +18,8 @@ func main() {
 		powersOfTwo[i] = 2 * powersOfTwo[i - 1]
 	}
 	fmt.Printf("powersOfTwo=%v (%T)\n", powersOfTwo, powersOfTwo)
+	fmt.Println()
+
 	// An array can be initialized using an array literal
 	var names = [5]string{"Alice", "Bob", "Carol", "Dave", "Edgar"}
 	fmt.Printf("names=%v (%T)\n", names, names)
@@ -24,13 +27,16 @@ func main() {
 	fmt.Printf("ages=%v (%T)\n", ages, ages)
 	var vegetarians = [...]bool{2: true, false, true} // Size is not needed when assigning an array literal
 	fmt.Printf("vegetarians=%v (%T)\n", vegetarians, vegetarians)
+	fmt.Println()
+
 	// The builtin "len" function returns an array's size
 	fmt.Printf("Size of names array=%d\n", len(names))
 	// An array's type includes its size, which means that:
 	// - You cannot assign an array of type [3]int to an array of type [5]int
 	// - You cannot use a varaiable to declare the array size, as it must be known at compile time
-	// Therefore, arrays are seldom used - use arrays only when you know the exact size needed upfront.
+	// Therefore, arrays are seldom used - use arrays only when you know the exact size needed up front.
 	// Arrays are mainly used as the backing store for slices.
+	fmt.Println()
 
 	// Slices
 	// A slice is similar to an array, but the size does not form part of its type
@@ -47,11 +53,21 @@ func main() {
 	var nonNil = []int{}
 	fmt.Printf("nonNil=%v (%T)\n", nonNil, nonNil)
 	fmt.Printf("nonNil == nil? %t\n", nonNil == nil)
+	fmt.Println()
+
+	// Grow slices with the built-in "append" function
+	nonEmpty := append(empty, 1)
+	fmt.Printf("nonEmpty=%v (%T)\n", nonEmpty, nonEmpty)
+	// Appending three elements (can append any number)
+	nonNil = append(nonNil, 1, 2, 3)
+	fmt.Printf("nonNil=%v (%T)\n", nonNil, nonNil)
 	var pets = []string{"Bruno", "Felix", "Fido"}
 	fmt.Printf("pets=%v (%T)\n", pets, pets)
-	// So, slices can grow as needed, using the built-in "append" function
-	pets = append(pets, "Koos", "Pluto") // Note that we're appending two elements (can append any number)
+	pets = append(pets, "Koos", "Pluto", "Bernard", "Gizmo")
 	fmt.Printf("pets=%v (%T)\n", pets, pets)
+	// Like arrays, slices can also be sparse
+	var cats = []bool{1: true, 3: true, false, 6: true}
+	fmt.Printf("cats=%v (%T)\n", cats, cats)
 	// An entire slice can be appended to a slice using the ... operator to expand the slice being added
 	var semester1 = []string{"Jan", "Feb", "Mar", "Apr", "May", "Jun"}
 	var semester2 = []string{"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"}
@@ -59,20 +75,23 @@ func main() {
 	fmt.Printf("semester2=%v (%T)\n", semester2, semester2)
 	var year = append(semester1, semester2...)
 	fmt.Printf("year=%v (%T)\n", year, year)
-	// Like arrays, slices can also be sparse
-	var cats = []bool{1: true, 3: true, false}
-	fmt.Printf("cats=%v (%T)\n", cats, cats)
+	fmt.Println()
+
 	// In addition to size (len), a slice also has capacity (cap)
+	fmt.Printf("len(empty)=%d, cap(empty)=%d\n", len(empty), cap(empty))
+	fmt.Printf("len(nonEmpty)=%d, cap(nonEmpty)=%d\n", len(nonEmpty), cap(nonEmpty))
+	fmt.Printf("len(nonNil)=%d, cap(nonNil)=%d\n", len(nonNil), cap(nonNil))
 	fmt.Printf("len(pets)=%d, cap(pets)=%d\n", len(pets), cap(pets))
+	fmt.Printf("len(cats)=%d, cap(cats)=%d\n", len(cats), cap(cats))
 	fmt.Printf("len(semester1)=%d, cap(semester1)=%d\n", len(semester1), cap(semester1))
 	fmt.Printf("len(year)=%d, cap(year)=%d\n", len(year), cap(year))
-	fmt.Printf("len(empty)=%d, cap(empty)=%d\n", len(empty), cap(empty))
-	fmt.Printf("len(nonNil)=%d, cap(nonNil)=%d\n", len(nonNil), cap(nonNil))
 	var numbers []int
 	for i := 1; i <= 10; i++ {
 		numbers = append(numbers, i)
 		fmt.Printf("len(numbers)=%d, cap(numbers)=%d, numbers=%v \n", len(numbers), cap(numbers), numbers)
 	}
+	fmt.Println()
+
 	// To create a slice with an initial length that you happen to know, use the built-in "make" function
 	daysOfYear := make([]int, 365)
 	fmt.Printf("len(daysOfYear)=%d, cap(daysOfYear)=%d, daysOfYear=%v \n", len(daysOfYear), cap(daysOfYear), daysOfYear)
@@ -90,6 +109,8 @@ func main() {
 	fmt.Printf("len(daysOfLeapYear)=%d, cap(daysOfLeapYear)=%d, daysOfLeapYear=%v \n", len(daysOfLeapYear), cap(daysOfLeapYear), daysOfLeapYear)
 	// Cannot specify a capacity that is smaller than the length
 	//x := make([]int, 12, 7)
+	fmt.Println()
+
 	// A slice expression creates a slice from a slice (similar to Python)
 	daysOfJanuary := daysOfYear[:31] // 31 days, from index 0 to 30
 	daysOfFebruary := daysOfYear[31:59] // 28 days, from index 31 to 58
@@ -105,6 +126,8 @@ func main() {
 	// But beware that it shares the underlying data with that array...
 	fiveToNine[0] = 999
 	fmt.Printf("numbers=%v\n", numbers)
+	fmt.Println()
+
 	// The built-in "copy" function creates a slice that's independent of the original
 	sixToEight := make([]int, 3)
 	numCopied := copy(sixToEight, numbers[5:8]) // Could have used slice [5:] too - it will only copy 3 elements
@@ -112,6 +135,7 @@ func main() {
 	fmt.Printf("len(sixToEight)=%d, cap(sixToEight)=%d, sixToEight=%v \n", len(sixToEight), cap(sixToEight), sixToEight)
 	// Now, modifying the slice won't affect the original array
 	sixToEight[1] = 666
+	fmt.Printf("sixToEight=%v\n", sixToEight)
 	fmt.Printf("numbers=%v\n", numbers)
 	// The source and destination can be the same array/slice
 	copy(numbers[4:], numbers[:4]) // Don't need to assign return value

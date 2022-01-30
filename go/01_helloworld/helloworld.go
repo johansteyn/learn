@@ -1,7 +1,7 @@
 // Naming the package "main" makes it an executable (as opposed to a library).
 package main
 
-// The go fmt tool will sort import alphabetically
+// The go fmt tool will sort imports alphabetically
 import (
 	"fmt"
 	"os"
