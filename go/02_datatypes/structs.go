@@ -6,6 +6,7 @@ import (
 
 func main() {
 	fmt.Println("Structs")
+	fmt.Println()
 
 	// Declare a struct with the "type" keyword, the struct name, and the "struct" keyword,
 	// followed by braces containing the fields
@@ -34,6 +35,7 @@ func main() {
 	carol := new(person)
 	fmt.Printf("*carol=%v (%T)\n", *carol, *carol)
 	fmt.Printf("alice == *carol? %t\n", alice == *carol)
+	fmt.Println()
 
 	// Struct literals can list all field values, in order
 	dave := person{"Dave", 36, true}
@@ -55,16 +57,17 @@ func main() {
 	carol.name = "Carol"
 	carol.age = 39
 	fmt.Printf("*carol=%v (%T)\n", *carol, *carol)
+	fmt.Println()
 
 	// An anonymous struct does not use the "type" keyword
-	var bruno struct {
+	var frank struct {
 		name string
 		age int
 		vaccinated bool
 	}
-	bruno.name = "Bruno"
-	fmt.Printf("bruno=%v (%T)\n", bruno, bruno)
+	frank.name = "Frank"
+	fmt.Printf("frank=%v (%T)\n", frank, frank)
 	// In this case our anonymous struct has the exact same fields as the person struct,
 	// so we can compare it to any person.
-	fmt.Printf("alice == bruno? %t\n", alice == bruno)
+	fmt.Printf("alice == frank? %t\n", alice == frank)
 }

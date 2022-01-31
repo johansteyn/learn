@@ -13,6 +13,7 @@ const boilingTemp = 100
 
 func main() {
 	fmt.Println("Blocks")
+	fmt.Println()
 
 	// Here we print the value of the package scope constant
 	fmt.Println("boilingTemp:", boilingTemp)
@@ -26,6 +27,7 @@ func main() {
 	}
 	// Back to the local variable
 	fmt.Println("boilingTemp:", boilingTemp)
+	fmt.Println()
 
 	// There is also a "universe" block where some identifiers are pre-declared, eg:
 	//   Types: int, string, etc.
