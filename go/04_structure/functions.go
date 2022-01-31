@@ -10,14 +10,15 @@ import (
 // Entry function for Go programs
 func main() {
 	fmt.Println("Functions")
+	fmt.Println()
 
 	foo()
-	fmt.Printf("bar returned %d\n", bar(7))
+	fmt.Printf("bar(7) returned %d\n", bar(7))
 	x, y := 7, 12
 	x, y = foobar(x, y)
-	fmt.Printf("foobar returned %d and %d\n", x, y)
+	fmt.Printf("foobar(7, 12) returned %d and %d\n", x, y)
 	x, y = barfoo(x, y)
-	fmt.Printf("barfoo returned %d and %d\n", x, y)
+	fmt.Printf("barfoo(12, 7) returned %d and %d\n", x, y)
 	x, y = barfly(x, y)
 	fmt.Printf("barfly returned %d and %d\n", x, y)
 	fmt.Println()
@@ -30,10 +31,10 @@ func main() {
 	// Can also pass a slice - note the dots...
 	odds := []int{1, 3, 5, 7, 9}
 	print(odds...)
+	// Non-variadic parameters must be passed before variadic ones
+	// In this case the first parameter (10) is non-variadic.
 	inxs := inc(10, 1, 2, 7, 12, 24)
-	for i, x := range inxs {
-		fmt.Printf("#%d: %d\n", i, x)
-	}
+	print(inxs...)
 	fmt.Println()
 
 	// Functions are values
@@ -42,6 +43,7 @@ func main() {
 		fmt.Printf("function #%d: %d\n", i, f(9, 3))
 	}
 	fmt.Println()
+
 	// Same as above, but using a "type" for readability
 	type mathfunc func(int, int)int
 	mathfuncs := []mathfunc{add, sub, mul, div}
@@ -49,21 +51,25 @@ func main() {
 		fmt.Printf("function #%d: %d\n", i, f(9, 3))
 	}
 	fmt.Println()
+
 	// Anonymous function
 	n := func(a int, b int)int {
 		return a / b
 	}(42, 7) // Invoked immediately with parameter values 42 and 7 
 	fmt.Printf("Anonymous function returned %d\n", n)
 	// This in itself isn't useful - anonymous functions are more useful with "defer" (TODO...)
+	fmt.Println()
 
 	// Closures
 	f := outer(7)
 	fmt.Printf("Inner function returns %d\n", f())
 	fmt.Printf("Inner function returns %d\n", f())
 	fmt.Printf("Inner function returns %d\n", f())
+	fmt.Println()
 
 	// Defer
 	dirty()
+	fmt.Println()
 
 	// Recursion
 	recursive(9)
@@ -108,7 +114,9 @@ func flybar(a, b int) (x, y int) {
 // Same as above, but without actually using the return variables at all
 // Returned values are automatically assigned to the return variables
 // So, named return values are not very useful, but they are needed with "defer" (TODO...)
-// Again, not recommended - pointless naming return variables thyat are not used
+// Again, not recommended - pointless naming return variables that are not used
+// Q: Why does Go even allow this?
+//    Unused variables normally result in compile errors...
 func barfly(a, b int) (x, y int) {
 	return b, a
 }
@@ -120,7 +128,6 @@ func print(xs ...int) {
 	for i, x := range xs {
 		fmt.Printf("#%d: %d\n", i, x)
 	}
-	fmt.Println()
 }
 
 // At most one parameter can be variadic, and it must be the last one

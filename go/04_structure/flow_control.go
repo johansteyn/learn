@@ -6,6 +6,7 @@ import (
 
 func main() {
 	fmt.Println("Flow Control")
+	fmt.Println()
 
 	// If-Else is similar to other languages
 	// No parentheses, and braces are mandatory
@@ -24,6 +25,7 @@ func main() {
 	}
 	// x is out of scope here
 	//fmt.Printf("x=%d\n", x)
+	fmt.Println()
 
 	// Another way to do selection is with the switch statement
 	numbers := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
@@ -52,9 +54,11 @@ func main() {
 			y := 7
 			fmt.Printf("y=%d)\n", y)
 		}
+		// x and y are out of scope here
+		//fmt.Printf("x=%d, y=%d\n", x, y)
 	}
-	// x and y are out of scope here
-	//fmt.Printf("x=%d, y=%d\n", x, y)
+	fmt.Println()
+
 	// You can switch on any values that are comparable (ie. not only integers)
 	names := []string{"Alice", "Bob", "Carol", "Robin"}
 	for _, name := range names {
@@ -65,8 +69,7 @@ func main() {
 			fmt.Printf("%s is male\n", name)
 		}
 	}
-
-
+	fmt.Println()
 
 	// Go distinguishes between expression switches and type switches
 	// TODO...
@@ -137,12 +140,14 @@ func main() {
 		fmt.Printf("%s is %d years old\n", name, age)
 	}
 	fmt.Println()
+
 	// Note that the order is random
 	// And if we loop a second time, the order will most likely be different
 	for name, age := range students {
 		fmt.Printf("%s is %d years old\n", name, age)
 	}
 	fmt.Println()
+
 	// Looping over strings
 	applepie := "Apple π"
 	// The string consists of 7 runes, which span 8 bytes

@@ -55,8 +55,8 @@ func main() {
 // A variable can be created on the stack or on the heap.
 // A stack variable has a lifetime equal to its scope,
 // but a heap variable has a lifetime beyond its scope.
-// In foo the variable x has local scope and lifetime
-// But in bar variable x has local scope but it "escapes" its scope to live beyond it.
+// In foo the variable x has local scope and lifetime.
+// But in bar variable x has local scope that it "escapes".
 
 func foo() int {
 	x := 7 // x is created on the stack and does not live beyond function foo
