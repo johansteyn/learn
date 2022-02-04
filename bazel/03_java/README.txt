@@ -1,18 +1,15 @@
 This is for a multiple Java source files across packages.
 
-It builds a Java binary and a Java library.
+It builds a Java application and a Java library - all from a single BUILD file.
 
-The binary depends on teh library...
+The application depends on the library.
 
-Build the library using:
-
-  % cd src/package2
-  % bazel build :util
-
-
-Build the binary using:
+Build both the application and the library using:
 
   % bazel build :App
 
-Run in same manner as 02_java...
+This creates the application and library JAR files:
+
+  bazel-bin/App.jar
+  bazel-bin/libutil.jar
 

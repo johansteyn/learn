@@ -11,6 +11,12 @@ main_class was not provided and cannot be inferred:
 
 In this case, we place the single Java source file in "src".
 
+Run using:
+
+  % bazel run :App
+
+But that outputs Bazel stuff too, so rather build and run separately.
+
 Build using:
 
   % bazel build :App
@@ -35,11 +41,7 @@ Note that this doesn't work, as it doesn't have a manifest:
 
   % java -jar bazel-bin/App.jar
 
-Finally, it also produces a binary in:
-
-  bazel-bin
-
-Which can be run using:
+Finally, it also produces a binary which can be run using:
 
   % bazel-bin/App
 

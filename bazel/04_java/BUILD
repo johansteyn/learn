@@ -1,6 +1,7 @@
 java_binary(
   name = "App",
-  srcs = ["src/package1/App.java"],
+  srcs = glob(["**/*.java"]),
+ # srcs = ["src/package1/App.java"],
   deps = [":util"],
 )
 

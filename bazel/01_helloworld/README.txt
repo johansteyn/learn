@@ -10,10 +10,14 @@ Then build using:
 
   % bazel build //...
 
+or:
+
+  % bazel build :helloworld
+
 This will create a few folders off /private/var/tmp/_bazel_johan.steyn, and links to those folders.
 
-The "helloworld.txt" output file will be in:
+The resulting output file will be:
 
-  bazel-01_helloworld/bazel-out/darwin-fastbuild/bin/helloworld.txt 
+  bazel-bin/helloworld.txt 
 
 
