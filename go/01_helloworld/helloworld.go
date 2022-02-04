@@ -4,13 +4,17 @@ package main
 // The go fmt tool will sort imports alphabetically
 import (
 	"fmt"
-	"os"
+	// In case of name conflicts, an imprt can be renamed
+	newname "os"
+	// Any unused import results in a compile error
+	// To avoid that, use a blank import
+	_ "runtime"
 )
 
 // Execution begins in the "main" function
 func main() {
-	//fmt.Println("os.Args: ", os.Args)
-	args := os.Args[1:]
+	// Here we use "newname" instead of "os"
+	args := newname.Args[1:]
 	if len(args) == 0 {
 		fmt.Println("Hello World!")
 	} else {

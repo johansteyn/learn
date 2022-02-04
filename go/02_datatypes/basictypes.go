@@ -248,37 +248,5 @@ func main() {
 	// This is mainly because all members that start with an uppercase letter are public.
 	const MAX_TEMP = 100 // Don't use
 	const maxTemp = 100  // Rather use camelCase
-
-	// Types
-	// A type declaration defines a new named type for an existing underlying type
-	// Form: type <name> <underlying-type>
-	// Types are usually declared at package level (see below)
-	var freezingC celsius = 0
-	var freezingF fahrenheit = 32
-	// Cannot compare values of different types, even if their underlying types are the same
-	//if freezingC == freezingF {
-	// But can do a type conversion if their underlying types are the same
-	var convertedF = fahrenheit(freezingC)
-	fmt.Printf("convertedF = %d\n", convertedF)
-	if freezingF == convertedF {
-		fmt.Printf("%d Fahrenheit == %d Celsius\n", freezingF, freezingC)
-	} else {
-		fmt.Printf("%d Fahrenheit != %d Celsius\n", freezingF, freezingC)
-	}
-	// But that's not what we really want...
-	// We want to call a proper conversion function that calculates the correct value
-	var calculatedF = celsiusToFahrenheit(freezingC)
-	fmt.Printf("calculatedF = %d\n", calculatedF)
-	if freezingF == calculatedF {
-		fmt.Printf("%d Fahrenheit == %d Celsius\n", freezingF, freezingC)
-	} else {
-		fmt.Printf("%d Celsius != %d Fahrenheit\n", freezingF, freezingC)
-	}
-}
-
-type celsius int
-type fahrenheit int
-func celsiusToFahrenheit (c celsius) fahrenheit {
-	return fahrenheit(c * 9 / 5 + 32)
 }
 

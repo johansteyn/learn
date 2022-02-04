@@ -22,8 +22,27 @@ func main() {
 	fmt.Printf("+%d = %d\n", x, +x)
 	fmt.Println()
 
+	// Increment/decrement and assignment
+	n := 7
+	fmt.Printf("n: %d\n", n)
+	n++
+	fmt.Printf("n++: %d\n", n)
+	n--
+	fmt.Printf("n--: %d\n", n)
+	n += 5
+	fmt.Printf("n += 5: %d\n", n)
+	n -= 7
+	fmt.Printf("n -= 7: %d\n", n)
+	n *= 9
+	fmt.Printf("n *= 9: %d\n", n)
+	n /= 3
+	fmt.Printf("n /= 3: %d\n", n)
+	n %= 8
+	fmt.Printf("n %%= 8: %d\n", n) // Back to where we were :)
+	fmt.Println()
+
 	// Bitwise
-	a, b, c := 0, 6, 15  // 0000, 0110 and 1111
+	a, b, c := 0, 6, 15 // 0000, 0110 and 1111
 	fmt.Printf("%04b & %04b = %04b\n", a, b, a & b)
 	fmt.Printf("%04b & %04b = %04b\n", b, c, b & c)
 	fmt.Printf("%04b & %04b = %04b\n", a, c, a & c)
@@ -34,7 +53,7 @@ func main() {
 	fmt.Printf("%04b ^ %04b = %04b\n", b, c, b ^ c)
 	fmt.Printf("%04b ^ %04b = %04b\n", a, c, a ^ c)
 	// &^ is bit clear (AND NOT)
-	fmt.Printf("%04b &^ %04b = %04b\n", a, b, a &^ b) 
+	fmt.Printf("%04b &^ %04b = %04b\n", a, b, a &^ b)
 	fmt.Printf("%04b &^ %04b = %04b\n", b, c, b &^ c)
 	fmt.Printf("%04b &^ %04b = %04b\n", a, c, a &^ c)
 	fmt.Printf("%04b &^ %04b = %04b\n", b, a, b &^ a)
@@ -94,11 +113,10 @@ func main() {
 	fox, dog := "The quick brown fox", "jumps over the lazy dog"
 	fmt.Printf(`"%s" + "%s" = "%s"`, fox, dog, fox + dog)
 	fmt.Println()
+	fmt.Println()
 
 	// Omitted: 
-	//   Assignment (=, +=, -=, *=, etc.)
 	//   Pointers (& and *)
 	//   Channels (<-)
-
 }
 
