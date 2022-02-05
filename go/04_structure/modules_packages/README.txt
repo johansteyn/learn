@@ -1,5 +1,6 @@
 https://levelup.gitconnected.com/using-modules-and-packages-in-go-36a418960556
 https://tip.golang.org/doc/go1.16#modules
+https://www.youtube.com/watch?v=Z1VhG7cf83M
 
 A Go application can use local packages and depend on 3rd party code.
 
@@ -46,6 +47,13 @@ Note that "tidy" is only required if your module has dependencies.
 It will parse your source code to determine the dependencies, add them
 to your go.mod file and then download and place them in $GOPATH/pkg/mod.
 ie. "go mod tidy" effectively does what "go get" used to do.
+
+Interesting... if you run "go get", eg:
+  % go get rsc.io/quote
+Then it will add to go.mod and go.sum without looking at your source code.
+If you decide not to use those added dependencies in your source code, 
+then running "tidy" will remove those added entries.
+I cannot see any reason why you would run "go get" on its own when using modules...
 
 NOTE:
   Go will use the go.mod file in the current folder, or any parent folder.
