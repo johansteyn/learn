@@ -12,10 +12,10 @@ they can be imported as: "mymodule/mypackage1" and "mymodule/mypackage2"
 
 Not using modules will result in error:
 
-  % go run main.go        
-  main.go:5:2: package mymodule/mypackage1 is not in GOROOT (/usr/local/Cellar/go/1.17.6/libexec/src/mymodule/mypackage1)
-  main.go:6:2: package mymodule/mypackage2 is not in GOROOT (/usr/local/Cellar/go/1.17.6/libexec/src/mymodule/mypackage2)
-  main.go:7:2: no required module provides package github.com/hackebrot/turtle: go.mod file not found in current directory or any parent directory; see 'go help modules'
+  % go run myapp.go        
+  myapp.go:5:2: package mymodule/mypackage1 is not in GOROOT (/usr/local/Cellar/go/1.17.6/libexec/src/mymodule/mypackage1)
+  myapp.go:6:2: package mymodule/mypackage2 is not in GOROOT (/usr/local/Cellar/go/1.17.6/libexec/src/mymodule/mypackage2)
+  myapp.go:7:2: no required module provides package github.com/hackebrot/turtle: go.mod file not found in current directory or any parent directory; see 'go help modules'
 
 Before Go version 1.15 and modules, all local packages had to be placed in 
 $GOROOT or $GOPATH/src, and you needed to run "go get" to download 3rd party
@@ -58,4 +58,6 @@ I cannot see any reason why you would run "go get" on its own when using modules
 NOTE:
   Go will use the go.mod file in the current folder, or any parent folder.
 
+Should you keep go.mod and go.sum files under version control?
+Yes: https://github.com/golang/go/wiki/Modules
 
