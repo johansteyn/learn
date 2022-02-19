@@ -21,6 +21,10 @@ Build using:
 
   % bazel build :App
 
+This also works:
+
+  % bazel build //:App
+
 The .class file will be in:
 
   bazel-bin/_javac/App/App_classes
@@ -44,4 +48,15 @@ Note that this doesn't work, as it doesn't have a manifest:
 Finally, it also produces a binary which can be run using:
 
   % bazel-bin/App
+
+
+Other Bazel commands
+--------------------
+
+Display runtime info about the bazel server:
+
+  % bazel info
+
+
+  
 

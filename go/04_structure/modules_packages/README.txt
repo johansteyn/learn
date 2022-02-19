@@ -1,6 +1,7 @@
 https://levelup.gitconnected.com/using-modules-and-packages-in-go-36a418960556
 https://tip.golang.org/doc/go1.16#modules
 https://www.youtube.com/watch?v=Z1VhG7cf83M
+https://www.youtube.com/watch?v=20sLKEpHvvk <= Very good
 
 A Go application can use local packages and depend on 3rd party code.
 

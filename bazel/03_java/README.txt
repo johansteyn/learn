@@ -13,3 +13,6 @@ This creates the application and library JAR files:
   bazel-bin/App.jar
   bazel-bin/libutil.jar
 
+
+TODO: BUILD files in subdirs...
+
