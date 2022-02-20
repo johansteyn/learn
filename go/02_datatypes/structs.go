@@ -8,13 +8,16 @@ func main() {
 	fmt.Println("Structs")
 	fmt.Println()
 
-	// Declare a struct with the "type" keyword, the struct name, and the "struct" keyword,
-	// followed by braces containing the fields
+	// Declare a struct type with:
+	// - Keyword "type"
+	// - The name of the new type
+	// - Keyword "struct"
+	// - Followed by braces containing the fields
 	type person struct {
 		name string // Note that there are no commas between struct fields
 		age int
-		vaccinated bool
 	}
+
 	// To define a variable of that type
 	var alice person // Default nil value, where each field has its nil value
 	fmt.Printf("alice=%v (%T)\n", alice, alice)
@@ -38,7 +41,7 @@ func main() {
 	fmt.Println()
 
 	// Struct literals can list all field values, in order
-	dave := person{"Dave", 36, true}
+	dave := person{"Dave", 36}
 	fmt.Printf("dave=%v (%T)\n", dave, dave)
 	// Or any individual fields can be named in any order
 	edgar := person{
@@ -63,11 +66,60 @@ func main() {
 	var frank struct {
 		name string
 		age int
-		vaccinated bool
 	}
 	frank.name = "Frank"
 	fmt.Printf("frank=%v (%T)\n", frank, frank)
 	// In this case our anonymous struct has the exact same fields as the person struct,
 	// so we can compare it to any person.
 	fmt.Printf("alice == frank? %t\n", alice == frank)
+	fmt.Println()
+
+	// Types can be composed by struct embedding
+	// In OO design employee might extend person (is-a relationship)
+	// and it might contain a status (has-a relationship)
+	type status struct {
+		vaccinated bool
+	}
+	type employee struct {
+		title string
+		person // Note that person and status are anonymous fields
+		status // We don't need field names - only types
+	}
+	george := person{"George", 93}
+	vacc := status{true}
+	storeman := employee{"Storeman", george, vacc}
+	fmt.Printf("storeman=%v (%T)\n", storeman, storeman)
+	// So, while Go does not have inheritance, it has a handy shortcut...
+	// The fields of embedded structs can be referenced directly.
+	// Referencing embedded fields indirectly
+	fmt.Printf("storeman.person.name=%s\n", storeman.person.name)
+	fmt.Printf("storeman.person.age=%d\n", storeman.person.age)
+	fmt.Printf("storeman.status.vaccinated=%t\n", storeman.status.vaccinated)
+	// Referencing embedded fields directly
+	fmt.Printf("storeman.name=%s\n", storeman.name)
+	fmt.Printf("storeman.age=%d\n", storeman.age)
+	fmt.Printf("storeman.vaccinated=%t\n", storeman.vaccinated)
+	fmt.Println()
+
+	// But if two or more embedded structs have the same field...
+	type pet struct {
+		name string
+		age int
+	}
+	type student struct {
+		person
+		pet
+	}
+	harry := person{"Harry", 13}
+	benji := pet{"Benji", 7}
+	headboy := student{harry, benji}
+	// Direct references no longer work due to ambiguity
+	//fmt.Printf("headboy.name=%s\n", headboy.name)
+	//fmt.Printf("headboy.age=%d\n", headboy.age)
+	// Indirect references still work fine
+	fmt.Printf("headboy.person.name=%s\n", headboy.person.name)
+	fmt.Printf("headboy.person.age=%d\n", headboy.person.age)
+	fmt.Printf("headboy.pet.name=%s\n", headboy.pet.name)
+	fmt.Printf("headboy.pet.age=%d\n", headboy.pet.age)
+
 }
