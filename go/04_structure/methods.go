@@ -74,6 +74,7 @@ func main() {
 	fmt.Printf("bar(rect): %d\n", bar(rect)) // Also equivalent to: rect.area()
 }
 
+//----------------------------------------
 type rectangle struct {
 	width, height int
 }
@@ -85,6 +86,7 @@ func (r rectangle) area() int {
 	return r.width * r.height
 }
 
+//----------------------------------------
 type circle struct {
 	radius float32
 }
@@ -95,10 +97,13 @@ func (c circle) area() float32 {
 	return c.radius * c.radius * math.Pi
 }
 
+//----------------------------------------
 type counter struct {
 	total int
 }
 
+// The "area" methods above both use value receivers
+// To modify the receiver, use a pointer receiver
 // As with parameters, a pointer receiver enables us to modify the original
 func (c *counter) inc(n int) {
 	// Also, like pointer parameters, a pointer receiver can be nil

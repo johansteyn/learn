@@ -209,19 +209,17 @@ func main() {
 
 	// Constants
 	// A constant in Go is simply a way to give a name to a literal value
-	const c = 12
-	fmt.Printf("c=%d (%T)\n", c, c)
-	//c = 7 // Cannot re-assign a value to a constant
+	// Literals (and therefore constants) are untyped by default
+	//   https://riptutorial.com/go/example/12431/typed-vs--untyped-constants
+	// Constants can be declared with or without a type
+	// An untyped constant will have a default type
+	// The default type will be one of: numeric, character, string or boolean
+	const c = 42 // Untyped constant, with default numeric type
+	fmt.Printf("c=%v (%T)\n", c, c)
 	fmt.Println()
 
-	// Literals (and therefore constants) are untyped
-	//   https://riptutorial.com/go/example/12431/typed-vs--untyped-constants
-	// While literals/constants have no types of their own, 
-	// they have a default type when no other type can be inferred.
-	// A typed constant ensures that only a value of that type can be assigned to it,
-	// whereas leaving a constant untyped gives more flexibility
-
-	// So, our constant c above is untyped, which means it can be assigned to all these variables:
+	// When assigned, the compiler wil check that it can fit the type
+	// An untyped constant can be assigned to different typed variables:
   var ci int = c
 	fmt.Printf("ci=%d (%T)\n", ci, ci)
   var cf float32 = c
@@ -230,7 +228,35 @@ func main() {
 	fmt.Printf("cb=%d (%T)\n", cb, cb)
 	fmt.Println()
 
-	// A typed constant
+	// When used as a parameter, since parameters are passed by value,
+	// it is not the constant itself being passed as a parameter.
+	// Instead, it is a copy of the constant with the appropriate type.
+	// Here the copy will be of type float64, since that is what Sin expects
+	sinC := math.Sin(c)
+	fmt.Printf("sinC=%v (%T)\n", sinC, sinC)
+	// The same applies for literals
+	sin42 := math.Sin(42)
+	fmt.Printf("sin42=%v (%T)\n", sin42, sin42)
+	// But we cannot do the same for a variable, which has a fixed type
+	//sinJ := math.Sin(j)
+	//fmt.Printf("sinJ=%v (%T)\n", sinJ, sinJ)
+	fmt.Println()
+
+	// An untyped numeric constant is just a number with arbitrary precision
+	// That means it can hold a value larger than any type can hold, but when
+	// assigned to a variable or used as a parameter it needs to fit the type.
+	const novemdicillion = 1_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000
+	// The large constant can be declared but not assigned or printed,
+	// because it doesn't fit into any of the basic types
+	//assigned := novemdicillion 
+	//fmt.Printf("novemdicillion =%v (%T)\n", novemdicillion , novemdicillion )
+	// But it can be used in an expression - as long as the result of the expression can fit into a type
+	thousand := novemdicillion / (novemdicillion  / 1000)
+	fmt.Printf("thousand=%v (%T)\n", thousand, thousand)
+	fmt.Println()
+
+	// A typed constant ensures that only a value of that type can be assigned to it,
+	// whereas leaving a constant untyped provides us more flexibility
 	const tc int = 24
 	fmt.Printf("tc=%d (%T)\n", tc, tc)
   var tci int = tc // Can assign the typed constant to an int variable
@@ -239,9 +265,28 @@ func main() {
 	//fmt.Printf("tcf=%f (%T)\n", tcf, tcf)
 	fmt.Println()
 
+	// A group of constants can be declared in a single statement
+	const (
+		fullname = "Johan Frederik Steyn"	// String constant
+		year = 1967	// Numeric constant
+		gender = 'M'	// Character constant (actually, also a numeric)
+		vaccinated = true	// Boolean constant
+  )
+	fmt.Printf("fullname=%v (%T)\n", fullname, fullname)
+	fmt.Printf("year=%v (%T)\n", year, year)
+	fmt.Printf("gender=%v (%T)\n", gender, gender)
+	fmt.Printf("vaccinated=%v (%T)\n", vaccinated, vaccinated)
+
+	// Cannot re-assign a value to a constant (obviously)
+	//c = 7 
+	// Cannot assign result of function call (value must be know at compile time)
+	//const two = math.Sqrt(4)
+	// Cannot declare a constant using :=
+	//const q := 7 
+
 	// Unused variables are not allowed
 	//var unusedVar int = 36
-	// Unused constants are fine because constants cannot have side-effects, so can be eliminated by the compiler
+	// Unused constants are fine - they cannot have side-effects, so can be eliminated by the compiler
 	const unusedConst int = 48
 
 	// NOTE: Go does not use ALL_CAPS convention for constant names.
