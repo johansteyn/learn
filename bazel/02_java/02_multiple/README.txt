@@ -6,17 +6,18 @@ The binary depends on the library...
 
 Build the library using:
 
-  % cd src/package2
   % bazel build :util
 
-This creates JAR file:
-
-  bazel-bin/src/package2/libutil.jar
+This will create the JAR file: 
+  bazel-bin/libutil.jar
 
 Build the binary using:
 
   % bazel build :App
 
-TODO: Not working yet...
+This will build both the library JAR (if not already built) and the application JAR:
+  bazel-bin/libutil.jar
+  bazel-bin/App.jar
+
 
 
