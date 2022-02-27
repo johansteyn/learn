@@ -25,3 +25,8 @@ ie. about the time it takes to build just one module.
 Whether building individually or in parallel, if nothing has changed then subsequent
 builds are very fast, ie. the commands (including 5 seconds sleep) are not run.
 
+The -s option can be used to show the steps:
+
+  % bazel build -s //...
+
+
