@@ -82,8 +82,8 @@ func main() {
 	}
 	type employee struct {
 		title string
-		person // Note that person and status are anonymous fields
-		status // We don't need field names - only types
+		person // Note that person and status are embedded fields
+		status // Embedded fields don't need names - only types
 	}
 	george := person{"George", 93}
 	vacc := status{true}
