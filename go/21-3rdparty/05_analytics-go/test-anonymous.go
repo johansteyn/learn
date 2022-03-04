@@ -15,6 +15,8 @@ func main() {
 	client.Enqueue(analytics.Track{
 		Event: "test-anonymous",
 		AnonymousId: id.String(),
+		// Added the UserId to see if both can be used...
+		UserId: "test-user",
 	})
 	client.Close()
 }
