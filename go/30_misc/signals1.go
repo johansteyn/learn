@@ -1,5 +1,7 @@
 package main
 
+// https://gobyexample.com/signals
+
 import (
 	"fmt"
 	"os"
@@ -9,6 +11,9 @@ import (
 
 func main() {
 	fmt.Println("Signals")
+	fmt.Println()
+	fmt.Println("Press CTRL-C or CTRL-Z or CTRL-\\ or use the 'kill' command")
+	fmt.Println()
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs,
 		syscall.SIGINT,  // CTRL-C
@@ -22,7 +27,6 @@ func main() {
 		fmt.Printf("Signal intercepted: %s\n", sig)
 		done <- true
 	}()
-	fmt.Println("Awaiting signal...")
 	<-done
 	fmt.Println("Done.")
 }
