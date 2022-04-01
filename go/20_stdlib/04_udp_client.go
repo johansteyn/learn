@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net"
+	"os"
 )
 
 func main() {
@@ -19,8 +20,14 @@ func main() {
 	}
 	defer c.Close()
 
+	message := "Hello World!"
+	args := os.Args[1:]
+	if len(args) > 0 {
+		message = args[0]
+	}
+
 	fmt.Printf("Sending datagram to: %s...\n", c.RemoteAddr().String())
-	data := []byte("Hello World!\n")
+	data := []byte(message + "\n")
 	_, err = c.Write(data)
 	if err != nil {
 		fmt.Println(err)
@@ -28,4 +35,3 @@ func main() {
 	}
 	fmt.Println("Done.")
 }
-
