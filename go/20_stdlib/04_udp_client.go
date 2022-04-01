@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"time"
 )
 
 func main() {
@@ -26,12 +27,18 @@ func main() {
 		message = args[0]
 	}
 
-	fmt.Printf("Sending datagram to: %s...\n", c.RemoteAddr().String())
+	var start, end time.Time
+	fmt.Printf("Sending datagram to %s...\n", c.RemoteAddr().String())
+	defer func() {
+	  duration := end.Sub(start)
+		fmt.Printf("Time taken: %v\n", duration)
+	}()
 	data := []byte(message + "\n")
+	start = time.Now()
 	_, err = c.Write(data)
+	end = time.Now()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println("Done.")
 }

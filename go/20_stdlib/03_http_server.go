@@ -30,7 +30,6 @@ func main() {
 	http.HandleFunc("/hello", hello)
 	http.HandleFunc("/headers", headers)
 	http.HandleFunc("/v1/batch", batch)
-
 	http.ListenAndServe(":8080", nil)
 }
 
