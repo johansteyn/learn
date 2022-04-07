@@ -40,8 +40,8 @@ func main() {
 //			KeepAlive: 30 * time.Second,
 			KeepAlive: time.Second,
 		}).DialContext,
-//		ForceAttemptHTTP2:     true,
-		ForceAttemptHTTP2:     false,
+		ForceAttemptHTTP2:     true,
+//		ForceAttemptHTTP2:     false,
 		MaxIdleConns:          100,
 //		IdleConnTimeout:       90 * time.Second,
 		IdleConnTimeout:       time.Second,
@@ -56,7 +56,7 @@ func main() {
 			//Endpoint: "https://segment.io",
 			//Endpoint: "https://johansteyn.eu",
 			//Endpoint: "http://localhost:8080",
-			Transport: transport,
+//			Transport: transport,
 			BatchSize: 1, // Default batch size is 250
 	})
 	start := time.Now()

@@ -8,7 +8,12 @@ import (
 )
 
 func main() {
-	s, err := net.ResolveUDPAddr("udp4", "localhost:8080")
+	addr := "localhost:8080"
+	args := os.Args[1:]
+	if len(args) >= 1 {
+		addr = args[0]
+	}
+	s, err := net.ResolveUDPAddr("udp4", addr)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -22,11 +27,6 @@ func main() {
 	defer c.Close()
 
 	message := "Hello World!"
-	args := os.Args[1:]
-	if len(args) > 0 {
-		message = args[0]
-	}
-
 	var start, end time.Time
 	fmt.Printf("Sending datagram to %s...\n", c.RemoteAddr().String())
 	defer func() {

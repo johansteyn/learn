@@ -6,6 +6,11 @@ import (
 	"time"
 )
 
+func root(w http.ResponseWriter, req *http.Request) {
+	fmt.Println("/")
+	fmt.Fprintf(w, "root\n")
+}
+
 func hello(w http.ResponseWriter, req *http.Request) {
 	fmt.Println("hello")
 	fmt.Fprintf(w, "hello\n")
@@ -27,6 +32,7 @@ func batch(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+	http.HandleFunc("/", root)
 	http.HandleFunc("/hello", hello)
 	http.HandleFunc("/headers", headers)
 	http.HandleFunc("/v1/batch", batch)
