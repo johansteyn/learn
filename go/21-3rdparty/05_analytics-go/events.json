@@ -1,0 +1,43 @@
+{
+	"timestamp": "2022-04-12T14:15:49.852686+01:00",
+	"source": "atlascli",
+	"name": "atlas-projects-list",
+	"anonymousId": "xwv654uts321rqp123onm456lkj789ihg987fed654cba321",
+	"userId": "123abc456def789ghi987jkl654mno321pqr123stu456vwx",
+	"properties": {
+		"alias": "ls",
+		"authentication": "OAuth",
+		"duration": "123",
+		"flags": "--limit,--page",
+		"installer": "homebrew",
+		"orgId": "1234567890abcdefghijklmn",
+		"os": "linux/amd64",
+		"profileId": "default",
+		"projectId": "0987654321zyxwvutsrqponm",
+		"result": "SUCCESS",
+		"service": "cloud",
+		"terminal": "teletype",
+		"version": "1.23.0"
+	}
+}{
+	"timestamp": "2022-04-12T14:16:13.692213+01:00",
+	"source": "atlascli",
+	"name": "atlas-projects-list",
+	"anonymousId": "xwv654uts321rqp123onm456lkj789ihg987fed654cba321",
+	"userId": "123abc456def789ghi987jkl654mno321pqr123stu456vwx",
+	"properties": {
+		"alias": "ls",
+		"authentication": "OAuth",
+		"duration": "123",
+		"flags": "--limit,--page",
+		"installer": "homebrew",
+		"orgId": "1234567890abcdefghijklmn",
+		"os": "linux/amd64",
+		"profileId": "default",
+		"projectId": "0987654321zyxwvutsrqponm",
+		"result": "SUCCESS",
+		"service": "cloud",
+		"terminal": "teletype",
+		"version": "1.23.0"
+	}
+}

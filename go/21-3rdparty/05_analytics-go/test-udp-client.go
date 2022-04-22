@@ -12,29 +12,18 @@ type Event struct {
 	Timestamp string `json:"timestamp"`
 	Source string `json:"source"`
 	Name string `json:"name"`
-	AnonymousId string `json:"anonymousId"` // Hopefully won't need this...
+	AnonymousId string `json:"anonymousId"`
 	UserId string `json:"userId"`
-	ProfileId string `json:"profileId"` // Either "default" or a hash of the profile name
-	OrgId string `json:"orgId"`
-	ProjectId string `json:"projectId"`
-	Service string `json:"service"`
-	Authentication string `json:"authentication"`
-	Duration string `json:"duration"`
-	Result string `json:"result"`
-	Error string `json:"error"`
-	Flags string `json:"flags"`
-	Alias string `json:"alias"`
-	Version string `json:"version"`
-	OS string `json:"os"`
-	Installer string `json:"installer"`
-	Terminal string `json:"terminal"`
+	Properties map[string]string `json:"properties"`
 }
 
 // A new event will be created with the current time as timestamp.
 // If no address is specified, then the event will be persisted to file.
 // If an address is specified, then any previously persisted events
-// as well as the new event events will be sent to that address.
+// as well as the new event will be sent one-by-one to that address.
 // Eg: localhost:8080
+// Each event will be sent as a separate datagram message so as to 
+// not exceed the 1024 byte limit in the server.
 func main() {
 	var addr string
 	args := os.Args[1:]
@@ -51,24 +40,28 @@ func main() {
 	//RFC3339Millis := "2006-01-02T15:04:05.999Z07:00"
 	//fmt.Printf("now.Format(custom): %s\n", now.Format(RFC3339Millis))
 
+	var properties = map[string]string{
+		"profileId": "default",
+		"orgId": "1234567890abcdefghijklmn",
+		"projectId": "0987654321zyxwvutsrqponm",
+		"service": "cloud",
+		"authentication": "OAuth",
+		"duration": "123",
+		"result": "SUCCESS",
+		"flags": "--limit,--page",
+		"alias": "ls",
+		"version": "1.23.0",
+		"os": "linux/amd64",
+		"installer": "homebrew",
+		"terminal": "teletype",
+	}
 	event := &Event{
 		Timestamp: now.Format(time.RFC3339Nano),
 		Source: "atlascli",
 		Name: "atlas-projects-list",
+		AnonymousId: "xwv654uts321rqp123onm456lkj789ihg987fed654cba321",
 		UserId: "123abc456def789ghi987jkl654mno321pqr123stu456vwx",
-		ProfileId: "default",
-		OrgId: "1234567890abcdefghijklmn",
-		ProjectId: "0987654321zyxwvutsrqponm",
-		Service: "cloud",
-		Authentication: "OAuth",
-		Duration: "123",
-		Result: "SUCCESS",
-		Flags: "--limit,--page",
-		Alias: "ls",
-		Version: "1.23.0",
-		OS: "linux/amd64",
-		Installer: "homebrew",
-		Terminal: "teletype",
+		Properties: properties,
 	}
 
 	filename := "events.json"
@@ -95,6 +88,8 @@ func main() {
 	}
 	defer c.Close()
 
+// TODO: Instead of reading all the events into memory and then sending them,
+// rather send them one-by-one as they are read...
 	events, err := readEvents(filename)
 	if err != nil {
 			fmt.Println("Error reading JSON file")
@@ -152,6 +147,7 @@ func readEvents(filename string) ([]Event, error) {
 	return events, nil
 }
 
+// Append an event to the specified file
 // https://dev.to/evilcel3ri/append-data-to-json-in-go-5gbj
 func writeEvent(filename string, event *Event) (error) {
 	_, err := os.Stat(filename)

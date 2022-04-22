@@ -15,22 +15,9 @@ type Event struct {
 	Timestamp string `json:"timestamp"`
 	Source string `json:"source"`
 	Name string `json:"name"`
-	AnonymousId string `json:"anonymousId"` // Hopefully won't need this...
+	AnonymousId string `json:"anonymousId"`
 	UserId string `json:"userId"`
-	ProfileId string `json:"profileId"` // Either "default" or a hash of the profile name
-	OrgId string `json:"orgId"`
-	ProjectId string `json:"projectId"`
-	Service string `json:"service"`
-	Authentication string `json:"authentication"`
-	Duration string `json:"duration"`
-	Result string `json:"result"`
-	Error string `json:"error"`
-	Flags string `json:"flags"`
-	Alias string `json:"alias"`
-	Version string `json:"version"`
-	OS string `json:"os"`
-	Installer string `json:"installer"`
-	Terminal string `json:"terminal"`
+	Properties map[string]string `json:"properties"`
 }
 
 func main() {
@@ -72,10 +59,16 @@ func main() {
 		json.Unmarshal(buffer[0:n-1], &event)
 		fmt.Printf("Event: %#v\n", event)
 
+		properties := analytics.NewProperties()
+		for k, v := range event.Properties {
+			properties.Set(k, v)
+		}
+
 		segmentClient.Enqueue(analytics.Track{
 			Event: event.Name,
-			//AnonymousId: event.AnonymousId,
+			AnonymousId: event.AnonymousId,
 			UserId: event.UserId,
+			Properties: properties,
 		})
 	}
 }
