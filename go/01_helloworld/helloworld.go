@@ -4,10 +4,10 @@ package main
 // The go fmt tool will sort imports alphabetically
 import (
 	"fmt"
-	// In case of name conflicts, an imprt can be renamed
+	// In case of name conflicts, an import can be renamed
 	newname "os"
 	// Any unused import results in a compile error
-	// To avoid that, use a blank import
+	// To avoid that, use a blank import name
 	_ "runtime"
 )
 
