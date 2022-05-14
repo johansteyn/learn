@@ -23,10 +23,17 @@ func main() {
 	// An array can be initialized using an array literal
 	var names = [5]string{"Alice", "Bob", "Carol", "Dave", "Edgar"}
 	fmt.Printf("names=%v (%T)\n", names, names)
-	var ages = [5]int{1: 19, 3: 28, 65} // Sparse array: leaving out the ladies' ages
+	// Sparse array: leaving out the ladies' ages
+	var ages = [5]int{1: 19, 3: 28, 65}
 	fmt.Printf("ages=%v (%T)\n", ages, ages)
-	var vegetarians = [...]bool{2: true, false, true} // Size is not needed when assigning an array literal
+	// Size is not needed when assigning an array literal
+	var vegetarians = [...]bool{2: true, false, true}
 	fmt.Printf("vegetarians=%v (%T)\n", vegetarians, vegetarians)
+	// But if a size is specified it cannot be less than the literal size
+	//var idiots = [3]bool{false, true, true, false, true}
+	// It may be larger though - unassigned elements will have the nil value
+	var idiots = [6]bool{false, true, true, false, true}
+	fmt.Printf("idiots=%v (%T)\n", idiots, idiots)
 	fmt.Println()
 
 	// The builtin "len" function returns an array's size
@@ -42,7 +49,7 @@ func main() {
 	// A slice is similar to an array, but the size does not form part of its type
 	// Using [n] or [...] declares an array, while using [] declares a slice
 	// Since slices can grow and shrink, you can have an empty slice (but not an empty array).
-	var empty []int // Default nil value for a slice is... nil (first time we come across nil)
+	var empty []int // Default nil value for a slice is... nil
 	fmt.Printf("empty=%v (%T)\n", empty, empty)
 	// Go's nil is not quite like C or Java's null
 	// It's an identifier that represents the lack of a value.
@@ -85,6 +92,7 @@ func main() {
 	fmt.Printf("len(cats)=%d, cap(cats)=%d\n", len(cats), cap(cats))
 	fmt.Printf("len(semester1)=%d, cap(semester1)=%d\n", len(semester1), cap(semester1))
 	fmt.Printf("len(year)=%d, cap(year)=%d\n", len(year), cap(year))
+	// Capacity is increased when needed, doubling each time
 	var numbers []int
 	for i := 1; i <= 10; i++ {
 		numbers = append(numbers, i)
@@ -106,6 +114,9 @@ func main() {
 	fmt.Printf("len(daysOfLeapYear)=%d, cap(daysOfLeapYear)=%d, daysOfLeapYear=%v \n", len(daysOfLeapYear), cap(daysOfLeapYear), daysOfLeapYear)
 	daysOfLeapYear = append(daysOfLeapYear, daysOfYear...)
 	daysOfLeapYear = append(daysOfLeapYear, 366)
+	fmt.Printf("len(daysOfLeapYear)=%d, cap(daysOfLeapYear)=%d, daysOfLeapYear=%v \n", len(daysOfLeapYear), cap(daysOfLeapYear), daysOfLeapYear)
+	// Now if we append just one more, the capacity will (almost) double...
+	daysOfLeapYear = append(daysOfLeapYear, 367)
 	fmt.Printf("len(daysOfLeapYear)=%d, cap(daysOfLeapYear)=%d, daysOfLeapYear=%v \n", len(daysOfLeapYear), cap(daysOfLeapYear), daysOfLeapYear)
 	// Cannot specify a capacity that is smaller than the length
 	//x := make([]int, 12, 7)

@@ -20,7 +20,7 @@ func main() {
 	var freezingF fahrenheit = 32
 
 	// Cannot compare values of different types, even if their underlying types are the same
-	//if freezingC == freezingF {
+	//fmt.Println("freezingC==freezing? %t\n", freezingC == freezingF)
 
 	// But can do a type conversion if their underlying types are the same
 	var convertedF = fahrenheit(freezingC)
@@ -57,43 +57,3 @@ func fahrenheitToCelsius(f fahrenheit) celsius  {
 	return celsius(x)
 }
 
-
-
-
-/*
-
-	// A type declaration defines a new named type for an existing underlying type.
-	//  Format: type <name> <underlying-type>
-
-	var c Celsius = 100
-	var f Fahrenheit = CelsiusToFahrenheit(c)
-	fmt.Printf("c=%d, f=%d\n", c, f)
-
-	f = 100
-	c = FahrenheitToCelsius(f)
-	fmt.Printf("f=%d, c=%d\n", f, c)
-
-	// Since Celsius and Fahrenheit have the same underlying type, they can be compared
-	if c < f {
-	  fmt.Println("c < f")
-	} else {
-	  fmt.Println("c >= f")
-	}
-
-}
-
-type Celsius int
-type Fahrenheit int
-
-func CelsiusToFahrenheit(c Celsius) Fahrenheit {
-	//return Fahrenheit(c * 9 / 5 + 32)
-	var x float32 = float32(c) * 9.0 / 5.0 + 32.0
-	return Fahrenheit(x)
-}
-
-func FahrenheitToCelsius(f Fahrenheit) Celsius  {
-	//return Celsius(5.0 / 9 * (f - 32))
-	var x float32 = 5.0 / 9.0 * (float32(f) - 32.0)
-	return Celsius(x)
-}
-*/
