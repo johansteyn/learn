@@ -8,6 +8,9 @@ import (
 )
 
 func main() {
+	flags := make([]string, 0, 2)
+	flags = append(flags, "limit", "page")
+
 	id := ksuid.New()
 	client := analytics.New(os.Getenv("SEGMENT_WRITE_KEY"))
 	properties := analytics.NewProperties()
@@ -16,11 +19,11 @@ func main() {
 	properties.Set("projectId", "0987654321zyxwvutsrqponm")
 	properties.Set("authentication", "OAuth")
 	properties.Set("default", "true")
-	//properties.Set("result", "success")
+	//properties.Set("result", "SUCCESS")
 	properties.Set("result", "ERROR")
   properties.Set("error", `Error: invalid argument "x" for "--limit" flag: strconv.ParseInt: parsing "x": invalid syntax`)
-	properties.Set("duration", "123")
-	properties.Set("flags", "--limit,--page")
+	properties.Set("duration", 123)
+	properties.Set("flags", flags)
 	properties.Set("alias", "ls")
 	properties.Set("version", "1.23.0")
 	properties.Set("os", "linux/amd64")
