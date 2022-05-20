@@ -13,7 +13,7 @@ func main() {
 	// The standard way to declare variables is with "var",
 	// followed by the variable name, then the type.
 	// A value may optionally be assigned.
-	// If a value is assigned the the type is optional (it will be inferred)
+	// If a value is assigned then the type is optional (it will be inferred)
 	// If no value is assigned, the variable will get its default nil value (based on type)
 
 	// Integers
@@ -84,7 +84,7 @@ func main() {
 	// Float
 	var f float32 // Default nil value is 0.0
 	fmt.Printf("f=%f (%T)\n", f, f)
-	var f32 float32 = 6.03E23 // Can use lowercase 'e' or uppercase 'E'
+	var f32 float32 = 6.03e23 // Can use lowercase 'e' or uppercase 'E'
 	fmt.Printf("f32=%f (%T)\n", f32, f32)
 	var f64 float64 = 6.03E23
 	fmt.Printf("f64=%f (%T)\n", f64, f64)
@@ -155,7 +155,7 @@ func main() {
 	var name, age = "Johan", 42
 	fmt.Printf("name=%s (%T)\n", name, name)
 	fmt.Printf("age=%d (%T)\n", age, age)
-	// Also works with the short declaration form
+	// Also works with the short declaration form, but only if both variables are of the same type
 	x, y := 123, 456
 	fmt.Printf("x=%d (%T)\n", x, x)
 	fmt.Printf("y=%d (%T)\n", y, y)
@@ -184,7 +184,22 @@ func main() {
 	fmt.Printf("l6=%s (%T)\n", l6, l6)
 	fmt.Println()
 
-	// Variables of different types cannot be assigned to one another
+	// Can only compare values of the same type
+	// i, j, k, ib, io and ih are all of type int
+	fmt.Printf("%d == %d? %t\n", i, j, i == j)
+	fmt.Printf("%d == %d? %t\n", j, k, j == k)
+	fmt.Printf("%d == %d? %t\n", k, ib, k == ib)
+	fmt.Printf("%d == %d? %t\n", ib, io, ib == io)
+	fmt.Printf("%d == %d? %t\n", io, ih, io == ih)
+	// But i8 is of type int8
+	//fmt.Printf("%d == %d? %t\n", i, i8, i == i8)
+	// Both k and i64 happen to be 64-bit ints, but k has type int while i64 has type int64
+	//fmt.Printf("%d == %d? %t\n", k, i64, k == i64)
+	// Also cannot compare signed to unsigned - even if they are the same size
+	//fmt.Printf("%d == %d? %t\n", i, ui, i == ui)
+	fmt.Println()
+
+	// Can also only assign variables of the same type
 	//i = f // Cannot assign a float to an int
 	//f = i // Cannot even assign an int to a float
 	//i32 = i16 // Nor even an int16 to an int32
@@ -218,7 +233,7 @@ func main() {
 	fmt.Printf("c=%v (%T)\n", c, c)
 	fmt.Println()
 
-	// When assigned, the compiler wil check that it can fit the type
+	// When assigned, the compiler will check that it can fit the type
 	// An untyped constant can be assigned to different typed variables:
   var ci int = c
 	fmt.Printf("ci=%d (%T)\n", ci, ci)
@@ -254,6 +269,14 @@ func main() {
 	thousand := novemdicillion / (novemdicillion  / 1000)
 	fmt.Printf("thousand=%v (%T)\n", thousand, thousand)
 	fmt.Println()
+	// My own explanation:
+	// Constants and literals are processed at compile time
+	// The compiler can do arithmetic just fine on constant/literal values of any size
+	// as long as they are just constants or literals.
+	// But as soon as you want to assign a constant or literal to a variable,
+  // the compiler needs to know the type of the variable,
+	// since Go is a strongly types language,
+	// and that is where the constant/lietral needs to fit into a type.
 
 	// A typed constant ensures that only a value of that type can be assigned to it,
 	// whereas leaving a constant untyped provides us more flexibility

@@ -13,15 +13,21 @@ func main() {
 		width: 7,
 		height: 9,
 	}
+	fmt.Printf("rect = %v\n", rect)
+	fmt.Println()
+	
 	circ := circle{
 		radius: 5,
 	}
+	fmt.Printf("circ = %v\n", circ)
+	fmt.Println()
+
 	shapes := []shape{rect, circ}
 	for i, s := range(shapes) {
 		fmt.Printf("Shape #%d has area = %d\n", i, s.area())
 	}
+	fmt.Println()
 
-	fmt.Printf("circ = %v\n", circ)
 
 	// circ can be assigned to variables of either type
 	var ss1 ShapeStringer1 = circ
@@ -38,7 +44,7 @@ type rectangle struct {
 	width, height int
 }
 
-// Here rectangle implements the shape interface, but it does so implicityly
+// Here rectangle implements the shape interface, but it does so implicitly
 // ie. there is no explicit "implements" keyword
 // This decouples interface from implementation - "duck typing" with type safety.
 func (r rectangle) area() int {

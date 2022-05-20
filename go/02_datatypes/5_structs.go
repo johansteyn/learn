@@ -12,9 +12,9 @@ func main() {
 	// - Keyword "type"
 	// - The name of the new type
 	// - Keyword "struct"
-	// - Followed by braces containing the fields
+	// - Fields surrounded by braces
 	type person struct {
-		name string // Note that there are no commas between struct fields
+		name string // Note that there are no commas between fields
 		age int
 	}
 
@@ -36,6 +36,7 @@ func main() {
 	// Another way to create an empty variable is with the "new" keyword
 	// This actually creates a pointer, so we need to dereference it
 	carol := new(person)
+	fmt.Printf("carol=%v (%T)\n", carol, carol)
 	fmt.Printf("*carol=%v (%T)\n", *carol, *carol)
 	fmt.Printf("alice == *carol? %t\n", alice == *carol)
 	fmt.Println()
@@ -49,6 +50,8 @@ func main() {
 		name: "Edgar", // The last field also has a comma
 	}
 	fmt.Printf("edgar=%v (%T)\n", edgar, edgar)
+	fmt.Println()
+	
 	// Individual fields are accessed (set/get) using dot notation
 	alice.name = "Alice"
 	alice.age = 21

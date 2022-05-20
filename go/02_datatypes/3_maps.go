@@ -30,9 +30,14 @@ func main() {
 	fmt.Printf("students=%v (%T)\n", students, students)
 	// Creating a map using make, and specifying an initial size
 	pets := make(map[string]bool, 10)
+	fmt.Println()
+
 	// The built-in "len" function returns the number of key-value pairs
+	fmt.Printf("len(empty)=%d\n", len(empty))
+	fmt.Printf("len(students)=%d\n", len(students))
+	// While pets has an initial size, len returns the number of actual entries
 	fmt.Printf("len(pets)=%d\n", len(pets))
-	// But the built-in "cap" function doesn't work for maps... 
+	// The built-in "cap" function doesn't work for maps... 
 	//fmt.Printf("cap(pets)=%d\n", cap(pets))
 	fmt.Println()
 
@@ -42,7 +47,7 @@ func main() {
 	pets["Fido"] = true
 	pets["Felix"] = true // Overrides the previous value
 	fmt.Printf("pets=%v (%T)\n", pets, pets)
-	fmt.Printf("len(pets)=%d\n", len(pets))
+	fmt.Printf("len(pets)=%d\n", len(pets)) // Now pets has a len > 0 but < initial size
 	fmt.Println()
 
 	// Getting a map entry is similar to getting an array or slice entry

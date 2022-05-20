@@ -17,7 +17,7 @@ func main() {
 but cannot contain backquotes at all
 and newlines do not need to be escaped.`
 	fmt.Printf("s=%s (%T)\n", s, s)
-	s = "String literals contain runes: π a\142\x63\u0064\U00000065"
+	s = "String literals contain runes: π a\141\x61\u0061\U00000061" // 141 octal == 61 hexadecimal
 	fmt.Printf("s=%s (%T)\n", s, s)
 	fmt.Println()
 
@@ -60,6 +60,8 @@ and newlines do not need to be escaped.`
 	fmt.Printf("count(foreign)=%d\n", count(foreign))
 	// Rather use this standard library function though
 	fmt.Printf("utf8.RuneCountInString(foreign)=%d\n", utf8.RuneCountInString(foreign))
+	// Or convert the string to a slice of runes and get its length
+	fmt.Printf("len([]rune(foreign))=%d\n", len([]rune(foreign)))
 	fmt.Println()
 
 	// Accessing an individual element we only get the first byte
