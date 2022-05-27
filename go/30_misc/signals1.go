@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 )
 
 func main() {
@@ -28,6 +29,7 @@ func main() {
 		done <- true
 	}()
 	<-done
+	time.Sleep(5 * time.Hour)
 	fmt.Println("Done.")
 }
 
