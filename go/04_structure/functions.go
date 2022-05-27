@@ -7,7 +7,7 @@ import (
 // Format of function declaration: 
 //  func <name>([<params...>]) <return types> {...}
 
-// Entry function for Go programs
+// The entry function for Go programs is called "main"
 func main() {
 	fmt.Println("Functions")
 	fmt.Println()
@@ -34,7 +34,7 @@ func main() {
 	// Non-variadic parameters must be passed before variadic ones
 	// In this case the first parameter (10) is non-variadic.
 	inxs := inc(10, 1, 2, 7, 12, 24)
-	print(inxs...)
+	fmt.Printf("inxs: %v\n", inxs)
 	fmt.Println()
 
 	// Functions are values

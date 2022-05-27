@@ -32,6 +32,7 @@ func main() {
 	for _, number := range numbers {
 		// No parentheses, and braces are mandatory
 		switch number {
+		// Note that "case" and "default" are like labels, hence they are not indented.
 		case 1, 2: // Multiple values allowed
 			fmt.Printf("%d is a small number\n", number)
 			// No break needed (ie. no fall-through) 
