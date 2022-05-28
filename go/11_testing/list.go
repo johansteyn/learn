@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	"os"
 	"strconv"
 	"time"
 )
@@ -15,26 +14,41 @@ type node struct {
 
 type list struct {
 	head *node
+	tail *node
 	size int
 }
 
 func New() list {
-	return list{nil, 0}
+	return list{nil, nil, 0}
 }
 
-func (l *list) add(value int) {
+// A slow add function that travereses the entire list
+func (l *list) add1(value int) {
 	l.size++
-	n := &node{value, nil}
+	newNode := &node{value, nil}
 	if l.head == nil {
-		l.head = n
+		l.head = newNode
 		return
 	}
-	for tail := l.head; tail != nil; tail = tail.next {
-		if tail.next == nil {
-			tail.next = n
+	for n := l.head; n != nil; n = n.next {
+		if n.next == nil {
+			n.next = newNode
 			return
 		}
 	}
+}
+
+// A faster add function that uses the tail node
+func (l *list) add2(value int) {
+	l.size++
+	newNode := &node{value, nil}
+	if l.head == nil {
+		l.head = newNode
+		l.tail = newNode
+		return
+	}
+	l.tail.next = newNode
+	l.tail = newNode
 }
 
 func (l *list) get(index int) (int, error) {
@@ -67,20 +81,28 @@ func main() {
 	fmt.Println()
 
 	list := New()
+	size := getTemperature()
 	rand.Seed(time.Now().UnixNano())
-	for i := 0; i < 10; i++ {
-		list.add(rand.Intn(100))
+	for i := 0; i < size; i++ {
+		list.add1(rand.Intn(100))
 	}
 	fmt.Printf("list: %s\n", list.String())
 	fmt.Printf("list.size: %d\n", list.size)
-	// Deliberately going out of bounds here - to be covered in a test...
-	for i := 0; i < 11; i++ {
+	// Deliberately going out of bounds here
+	for i := 0; i < size+1; i++ {
+		//for i := 0; i < size; i++ {
 		value, err := list.get(i)
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
-			os.Exit(1)
+			break
 		}
 		fmt.Printf("list.get(%d): %d\n", i, value)
-
 	}
+}
+
+// Global variable for a function that gets the temperature from a web service
+// This implementation simply returns a hard-coded value
+// It is replaced in the TestMain to "mock" the implementation
+var getTemperature = func() int {
+	return 10
 }
