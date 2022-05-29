@@ -1,3 +1,3 @@
-module test_list
+module testlist
 
 go 1.18

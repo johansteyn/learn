@@ -1,10 +1,7 @@
-package main
+package datastructures
 
 import (
 	"fmt"
-	"math/rand"
-	"strconv"
-	"time"
 )
 
 type node struct {
@@ -18,12 +15,18 @@ type list struct {
 	size int
 }
 
+// Interesting...
+// The "list" type is not exported, but it can be used indirectly in main.go
 func New() list {
 	return list{nil, nil, 0}
 }
 
-// A slow add function that travereses the entire list
-func (l *list) add1(value int) {
+func (l *list) Size() int {
+	return l.size
+}
+
+// A slow add function that traverses the entire list
+func (l *list) Add1(value int) {
 	l.size++
 	newNode := &node{value, nil}
 	if l.head == nil {
@@ -39,7 +42,7 @@ func (l *list) add1(value int) {
 }
 
 // A faster add function that uses the tail node
-func (l *list) add2(value int) {
+func (l *list) Add2(value int) {
 	l.size++
 	newNode := &node{value, nil}
 	if l.head == nil {
@@ -51,7 +54,7 @@ func (l *list) add2(value int) {
 	l.tail = newNode
 }
 
-func (l *list) get(index int) (int, error) {
+func (l *list) Get(index int) (int, error) {
 	if index < 0 || index >= l.size {
 		return 0, fmt.Errorf("index out of bounds: %d", index)
 	}
@@ -66,43 +69,23 @@ func (l *list) get(index int) (int, error) {
 	return 0, fmt.Errorf("unexpected error")
 }
 
-// TODO: A get method that returns the value at the specified index, returning an error if not found
-
 func (l *list) String() string {
-	s := ""
-	for node := l.head; node != nil; node = node.next {
-		s = s + " " + strconv.Itoa(node.value)
-	}
-	return s
+	return fmt.Sprintf("%v", l.slice())
 }
 
-func main() {
-	fmt.Println("Linked List")
-	fmt.Println()
-
-	list := New()
-	size := getTemperature()
-	rand.Seed(time.Now().UnixNano())
-	for i := 0; i < size; i++ {
-		list.add1(rand.Intn(100))
+func (l *list) slice() []int {
+	s := make([]int, l.size)
+	node := l.head
+	for i := 0; i < l.size; i++ {
+		s[i] = node.value
+		node = node.next
 	}
-	fmt.Printf("list: %s\n", list.String())
-	fmt.Printf("list.size: %d\n", list.size)
-	// Deliberately going out of bounds here
-	for i := 0; i < size+1; i++ {
-		//for i := 0; i < size; i++ {
-		value, err := list.get(i)
-		if err != nil {
-			fmt.Printf("Error: %v\n", err)
-			break
-		}
-		fmt.Printf("list.get(%d): %d\n", i, value)
-	}
+	return s
 }
 
 // Global variable for a function that gets the temperature from a web service
 // This implementation simply returns a hard-coded value
 // It is replaced in the TestMain to "mock" the implementation
-var getTemperature = func() int {
-	return 10
+var GetTemperature = func() int {
+	return 24
 }

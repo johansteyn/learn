@@ -1,14 +1,24 @@
-To run all tests in this folder:
+To run all the tests from the root folder:
+
+  % go test ./...
+
+Otherwise, change to the subfolder where you want to run tests:
+
+  % cd datastructures
+
+Then, to run all tests in the subfolder, use either of:
 
   % go test
+  % go test .   <= Output to stdout is missing?
 
-For more verbose output:
+For verbose output:
 
   % go test -v
 
 To run individual tests that match a pattern:
 
-  % go test -run "With"
+  % go test -run "New"
+  % go test -run "10"
 
 To check coverage:
 
@@ -28,16 +38,15 @@ To run ONLY the benchmark tests, ie. exclude normal tests:
 
   % go test -run=NONE -bench=.
 
+To run only the benchmark tests that use Add2:
 
-To run only the benchmark tests that use add1:
+  % go test -run=NONE -bench=ListAdd2
 
-  % go test -run=NONE -bench=ListAdd1
-
-To run the benchmark tests for both add1 and add2 100 and 1000 times each:
+To run the benchmark tests for both Add1 and Add2 100 and 1000 times each:
 
   % go test -run=NONE -bench=ListAdd._100
 
-To run the benchmark tests for both add1 and add2 100 times each:
+To run the benchmark tests for both Add1 and Add2 100 times each:
 
   % go test -run=NONE -bench=ListAdd._100$
 
@@ -51,7 +60,11 @@ To produce CPU, memory and block statistics:
   % go test -run=NONE -bench=. -memprofile=mem.out
   % go test -run=NONE -bench=. -blockprofile=block.out
 
-Running the CPU profiling command above produces file: test_list.test and cpu.out
+Running the CPU profiling command above produces the specified profile file as well as file: datastructures.test
 Pass those filenames to the pprof tool to produce output:
 
-  % go tool pprof -text -nodecount=10 test_list.test cpu.out
+  % go tool pprof -text -nodecount=10 datastructures.test cpu.out
+  % go tool pprof -text -nodecount=10 datastructures.test mem.out
+  % go tool pprof -text -nodecount=10 datastructures.test block.out
+
+
