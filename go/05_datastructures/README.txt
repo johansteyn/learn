@@ -8,4 +8,6 @@ Todo:
 - Stack
 - BinaryTree
 
+Also todo:
+- Generics (ie. not only ints)
 
