@@ -1,7 +1,7 @@
 package main
 
 import (
-	"datastructures/datastructures"
+	"datastructures"
 	"fmt"
 	"math/rand"
 	"time"
@@ -10,7 +10,7 @@ import (
 func main() {
 	fmt.Println("Linked List")
 	fmt.Println()
-	list := datastructures.New()
+	list := datastructures.NewList()
 	size := 10
 	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < size; i++ {

@@ -16,7 +16,7 @@ type LinkedList struct {
 	size int
 }
 
-func New() LinkedList {
+func NewList() LinkedList {
 	return LinkedList{nil, nil, 0}
 }
 
@@ -24,20 +24,7 @@ func (l *LinkedList) Size() int {
 	return l.size
 }
 
-// TODO: Rewrite in terms of Insert...
 func (l *LinkedList) Add(value int) {
-	/*
-		l.size++
-		newNode := &listNode{value, nil, nil}
-		if l.head == nil {
-			l.head = newNode
-			l.tail = newNode
-			return
-		}
-		l.tail.next = newNode
-		newNode.prev = l.tail
-		l.tail = newNode
-	*/
 	l.Insert(value, l.size)
 }
 
