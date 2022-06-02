@@ -2,10 +2,10 @@ Implementing datastructures myself...
 
 Done:
 - LinkedList
-
-Todo:
 - Queue
 - Stack
+
+Todo:
 - BinaryTree
 
 Also todo:
