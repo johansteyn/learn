@@ -97,4 +97,14 @@ func main() {
 		fmt.Printf("Popped: %2d\n", value)
 	}
 	fmt.Println()
+
+	// Binary Tree
+	tree := datastructures.NewTree()
+	tree.Add(42)
+	tree.Add(69)
+	tree.Add(7)
+	tree.Add(12)
+	fmt.Printf("tree size: %d\n", tree.Size())
+	fmt.Printf("tree: %s\n", tree.String())
+	fmt.Println()
 }
