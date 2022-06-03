@@ -53,6 +53,7 @@ func (n *treeNode) add(value int) {
 			n.right.add(value)
 		}
 	}
+	n.weight++
 }
 
 func (t *BinaryTree) Remove(index int) error {
@@ -70,6 +71,42 @@ func (t *BinaryTree) Get(index int) (int, error) {
 	}
 	// TODO...
 	return 0, fmt.Errorf("unexpected error")
+}
+
+func (t *BinaryTree) Find(value int) (index int, ok bool) {
+	if t.root == nil {
+		return 0, false
+	}
+	x := 0
+	if t.root.left != nil {
+		x = t.root.left.weight
+	}
+	return t.root.find(value, x)
+}
+
+func (n *treeNode) find(value int, x int) (index int, ok bool) {
+	if value == n.value {
+		return x, true
+	}
+	if value < n.value {
+		if n.left == nil {
+			return 0, false
+		}
+		y := x - 1
+		if n.left.right != nil {
+			y -= n.left.right.weight
+		}
+		return n.left.find(value, y)
+	} else {
+		if n.right == nil {
+			return 0, false
+		}
+		y := x + 1
+		if n.right.left != nil {
+			y += n.right.left.weight
+		}
+		return n.right.find(value, y)
+	}
 }
 
 func (t *BinaryTree) String() string {

@@ -137,6 +137,17 @@ func (l *LinkedList) Get(index int) (int, error) {
 	return 0, fmt.Errorf("unexpected error")
 }
 
+func (l *LinkedList) Find(value int) (index int, ok bool) {
+	node := l.head
+	for i := 0; i < l.size; i++ {
+		if value == node.value {
+			return i, true
+		}
+		node = node.next
+	}
+	return 0, false
+}
+
 func (l *LinkedList) String() string {
 	return fmt.Sprintf("%v", l.slice())
 }

@@ -39,6 +39,16 @@ func main() {
 		}
 		fmt.Printf("list.Get(%d): %d\n", i, value)
 	}
+	for i := 0; i < 10*size; i++ {
+		value := rand.Intn(99) + 1
+		fmt.Printf("Searching for %d...", value)
+		index, ok := list.Find(value)
+		if ok {
+			fmt.Printf(" found at index %d\n", index)
+		} else {
+			fmt.Printf(" not found\n")
+		}
+	}
 	fmt.Printf("Removing first node...\n")
 	list.Remove(0)
 	fmt.Printf("list size: %d\n", list.Size())
@@ -100,11 +110,22 @@ func main() {
 
 	// Binary Tree
 	tree := datastructures.NewTree()
-	tree.Add(42)
-	tree.Add(69)
-	tree.Add(7)
-	tree.Add(12)
+	for i := 0; i < size; i++ {
+		value := rand.Intn(99) + 1
+		fmt.Printf("Adding %2d to tree...\n", value)
+		tree.Add(value)
+	}
 	fmt.Printf("tree size: %d\n", tree.Size())
 	fmt.Printf("tree: %s\n", tree.String())
+	for i := 0; i < 10*size; i++ {
+		value := rand.Intn(99) + 1
+		fmt.Printf("Searching for %d...", value)
+		index, ok := tree.Find(value)
+		if ok {
+			fmt.Printf(" found at index %d\n", index)
+		} else {
+			fmt.Printf(" not found\n")
+		}
+	}
 	fmt.Println()
 }

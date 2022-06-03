@@ -25,12 +25,10 @@ func (q *Queue) Dequeue() (int, error) {
 	if q.list.Size() <= 0 {
 		return 0, fmt.Errorf("empty queue")
 	}
-	//value, err := q.list.Get(q.list.Size() - 1)
 	value, err := q.list.Get(0)
 	if err != nil {
 		return 0, err
 	}
-	//err = q.list.Remove(q.list.Size() - 1)
 	err = q.list.Remove(0)
 	if err != nil {
 		return 0, err
