@@ -127,5 +127,14 @@ func main() {
 			fmt.Printf(" not found\n")
 		}
 	}
+	fmt.Printf("tree: %s\n", tree.String())
+	for i := 0; i < tree.Size(); i++ {
+		value, err := tree.Get(i)
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+			break
+		}
+		fmt.Printf("tree.Get(%d): %d\n", i, value)
+	}
 	fmt.Println()
 }

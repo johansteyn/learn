@@ -69,8 +69,33 @@ func (t *BinaryTree) Get(index int) (int, error) {
 	if index < 0 || index >= t.size {
 		return 0, fmt.Errorf("index out of bounds: %d", index)
 	}
-	// TODO...
-	return 0, fmt.Errorf("unexpected error")
+	return t.root.get(index)
+}
+
+func (n *treeNode) get(index int) (int, error) {
+	leftWeight := 0
+	if n.left != nil {
+		leftWeight = n.left.weight
+	}
+	if index == leftWeight {
+		return n.value, nil
+	} else if index < leftWeight {
+		return n.left.get(index)
+	} else if index > leftWeight {
+		return n.right.get(index - leftWeight - 1)
+	}
+	return -1, nil
+}
+
+// Does an in-order traversal
+func (n *treeNode) traverse() {
+	if n.left != nil {
+		n.left.traverse()
+	}
+	fmt.Printf("Visited node: %d\n", n.value)
+	if n.right != nil {
+		n.right.traverse()
+	}
 }
 
 func (t *BinaryTree) Find(value int) (index int, ok bool) {
