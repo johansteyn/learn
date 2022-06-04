@@ -136,5 +136,18 @@ func main() {
 		}
 		fmt.Printf("tree.Get(%d): %d\n", i, value)
 	}
+	for i := 0; tree.Size() > 0; i++ {
+		value := rand.Intn(99) + 1
+		_, ok := tree.Find(value)
+		if !ok {
+			continue
+		}
+		fmt.Printf("Removing %d...\n", value)
+		err := tree.Remove(value)
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+		}
+		fmt.Printf("tree: %s\n", tree.String())
+	}
 	fmt.Println()
 }

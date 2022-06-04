@@ -56,48 +56,6 @@ func (n *treeNode) add(value int) {
 	n.weight++
 }
 
-func (t *BinaryTree) Remove(index int) error {
-	if index < 0 || index > t.size-1 {
-		return fmt.Errorf("index out of bounds: %d", index)
-	}
-	// TODO...
-	t.size--
-	return nil
-}
-
-func (t *BinaryTree) Get(index int) (int, error) {
-	if index < 0 || index >= t.size {
-		return 0, fmt.Errorf("index out of bounds: %d", index)
-	}
-	return t.root.get(index)
-}
-
-func (n *treeNode) get(index int) (int, error) {
-	leftWeight := 0
-	if n.left != nil {
-		leftWeight = n.left.weight
-	}
-	if index == leftWeight {
-		return n.value, nil
-	} else if index < leftWeight {
-		return n.left.get(index)
-	} else if index > leftWeight {
-		return n.right.get(index - leftWeight - 1)
-	}
-	return -1, nil
-}
-
-// Does an in-order traversal
-func (n *treeNode) traverse() {
-	if n.left != nil {
-		n.left.traverse()
-	}
-	fmt.Printf("Visited node: %d\n", n.value)
-	if n.right != nil {
-		n.right.traverse()
-	}
-}
-
 func (t *BinaryTree) Find(value int) (index int, ok bool) {
 	if t.root == nil {
 		return 0, false
@@ -131,6 +89,111 @@ func (n *treeNode) find(value int, x int) (index int, ok bool) {
 			y += n.right.left.weight
 		}
 		return n.right.find(value, y)
+	}
+}
+
+func (t *BinaryTree) Get(index int) (int, error) {
+	if index < 0 || index >= t.size {
+		return 0, fmt.Errorf("index out of bounds: %d", index)
+	}
+	return t.root.get(index)
+}
+
+func (n *treeNode) get(index int) (int, error) {
+	leftWeight := 0
+	if n.left != nil {
+		leftWeight = n.left.weight
+	}
+	if index == leftWeight {
+		return n.value, nil
+	} else if index < leftWeight {
+		return n.left.get(index)
+	} else if index > leftWeight {
+		return n.right.get(index - leftWeight - 1)
+	}
+	return -1, nil
+}
+
+func (t *BinaryTree) Remove(value int) error {
+	if t.size == 0 {
+		return fmt.Errorf("value not found")
+	}
+	if t.size == 1 && t.root.value != value {
+		return fmt.Errorf("value not found")
+	}
+	newRoot, err := t.root.remove(value)
+	if err != nil {
+		return err
+	}
+	if newRoot != t.root {
+		t.root = newRoot
+	}
+	t.size--
+	return nil
+}
+
+func (n *treeNode) remove(value int) (*treeNode, error) {
+	if value < n.value {
+		if n.left == nil {
+			return nil, fmt.Errorf("value not found")
+		}
+		return n.left.remove(value)
+	} else if value > n.value {
+		if n.right == nil {
+			return nil, fmt.Errorf("value not found")
+		}
+		return n.right.remove(value)
+	}
+	return n.delete(), nil
+}
+
+// TODO: adjust weights...
+func (n *treeNode) delete() *treeNode {
+	var replacement *treeNode
+	if n.left == nil {
+		replacement = n.right
+	} else if n.right == nil {
+		replacement = n.left
+	} else {
+		// Take the right child, and hang the left child off its leftmost child
+		replacement = n.right
+		leftmost := replacement
+		for node := replacement.left; node != nil; node = node.left {
+			leftmost = node
+		}
+		leftmost.left = n.left
+		leftmost.left.parent = leftmost
+	}
+	if replacement != nil {
+		replacement.parent = n.parent
+	}
+	if n.parent != nil {
+		if n == n.parent.left {
+			n.parent.left = replacement
+		} else {
+			n.parent.right = replacement
+		}
+	}
+	root := replacement
+	if root == nil {
+		root = n.parent
+	}
+	if root != nil {
+		for node := root.parent; node != nil; node = node.parent {
+			root = node
+		}
+	}
+	return root
+}
+
+// Does an in-order traversal (not used anywhere)
+func (n *treeNode) traverse() {
+	if n.left != nil {
+		n.left.traverse()
+	}
+	fmt.Printf("Visited node: %d\n", n.value)
+	if n.right != nil {
+		n.right.traverse()
 	}
 }
 
