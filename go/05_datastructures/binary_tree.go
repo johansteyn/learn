@@ -56,6 +56,115 @@ func (n *treeNode) add(value int) *treeNode {
 	return n.balance()
 }
 
+func (t *BinaryTree) Remove(value int) error {
+	if t.size == 0 {
+		return fmt.Errorf("value not found")
+	}
+	if t.size == 1 && t.root.value != value {
+		return fmt.Errorf("value not found")
+	}
+	newRoot, err := t.root.remove(value)
+	if err != nil {
+		return err
+	}
+	if newRoot != t.root {
+		t.root = newRoot
+	}
+	t.size--
+	return nil
+}
+
+func (n *treeNode) remove(value int) (*treeNode, error) {
+	//fmt.Printf("*** %d.remove(%d)\n", n.value, value)
+	if value < n.value {
+		if n.left == nil {
+			return n, fmt.Errorf("value not found")
+		}
+		return n.left.remove(value)
+	} else if value > n.value {
+		if n.right == nil {
+			return n, fmt.Errorf("value not found")
+		}
+		return n.right.remove(value)
+	}
+	return n.delete(), nil
+}
+
+func (n *treeNode) delete() *treeNode {
+	//fmt.Printf("*** %d.delete()\n", n.value)
+	var replacement *treeNode
+	var deepest *treeNode
+	if n.left == nil {
+		replacement = n.right
+		deepest = replacement
+	} else if n.right == nil {
+		replacement = n.left
+		deepest = replacement
+	} else {
+		if n.left.weight < n.right.weight {
+			replacement = n.right
+			leftmost := replacement
+			for node := replacement.left; node != nil; node = node.left {
+				leftmost = node
+			}
+			leftmost.left = n.left
+			leftmost.left.parent = leftmost
+			deepest = leftmost.left
+		} else {
+			replacement = n.left
+			rightmost := replacement
+			for node := replacement.right; node != nil; node = node.right {
+				rightmost = node
+			}
+			rightmost.right = n.right
+			rightmost.right.parent = rightmost
+			deepest = rightmost.right
+		}
+	}
+	if replacement != nil {
+		replacement.parent = n.parent
+	}
+	if n.parent != nil {
+		if n == n.parent.left {
+			n.parent.left = replacement
+		} else {
+			n.parent.right = replacement
+		}
+		if replacement == nil {
+			replacement = n.parent
+			deepest = replacement
+		}
+	}
+	if deepest != nil {
+		for node := deepest; node != nil; {
+			if node.left == nil {
+				node = node.right
+			} else if node.right == nil {
+				node = node.left
+			} else {
+				if node.left.weight > node.right.weight {
+					node = node.left
+				} else {
+					node = node.right
+				}
+			}
+			if node != nil {
+				deepest = node
+			}
+		}
+	}
+	replacement = deepest
+	if replacement != nil {
+		for node := replacement; node != nil; node = node.parent {
+			node = node.balance()
+			if node != nil {
+				replacement = node
+			}
+		}
+	}
+	return replacement
+}
+
 const tolerance = 25
 
 var Balances int = 0
@@ -168,115 +277,6 @@ func (n *treeNode) adjustWeight() {
 	if n.right != nil {
 		n.weight += n.right.weight
 	}
-}
-
-func (t *BinaryTree) Remove(value int) error {
-	if t.size == 0 {
-		return fmt.Errorf("value not found")
-	}
-	if t.size == 1 && t.root.value != value {
-		return fmt.Errorf("value not found")
-	}
-	newRoot, err := t.root.remove(value)
-	if err != nil {
-		return err
-	}
-	if newRoot != t.root {
-		t.root = newRoot
-	}
-	t.size--
-	return nil
-}
-
-func (n *treeNode) remove(value int) (*treeNode, error) {
-	//fmt.Printf("*** %d.remove(%d)\n", n.value, value)
-	if value < n.value {
-		if n.left == nil {
-			return n, fmt.Errorf("value not found")
-		}
-		return n.left.remove(value)
-	} else if value > n.value {
-		if n.right == nil {
-			return n, fmt.Errorf("value not found")
-		}
-		return n.right.remove(value)
-	}
-	return n.delete(), nil
-}
-
-func (n *treeNode) delete() *treeNode {
-	//fmt.Printf("*** %d.delete()\n", n.value)
-	var replacement *treeNode
-	var deepest *treeNode
-	if n.left == nil {
-		replacement = n.right
-		deepest = replacement
-	} else if n.right == nil {
-		replacement = n.left
-		deepest = replacement
-	} else {
-		if n.left.weight < n.right.weight {
-			replacement = n.right
-			leftmost := replacement
-			for node := replacement.left; node != nil; node = node.left {
-				leftmost = node
-			}
-			leftmost.left = n.left
-			leftmost.left.parent = leftmost
-			deepest = leftmost.left
-		} else {
-			replacement = n.left
-			rightmost := replacement
-			for node := replacement.right; node != nil; node = node.right {
-				rightmost = node
-			}
-			rightmost.right = n.right
-			rightmost.right.parent = rightmost
-			deepest = rightmost.right
-		}
-	}
-	if replacement != nil {
-		replacement.parent = n.parent
-	}
-	if n.parent != nil {
-		if n == n.parent.left {
-			n.parent.left = replacement
-		} else {
-			n.parent.right = replacement
-		}
-		if replacement == nil {
-			replacement = n.parent
-			deepest = replacement
-		}
-	}
-	if deepest != nil {
-		for node := deepest; node != nil; {
-			if node.left == nil {
-				node = node.right
-			} else if node.right == nil {
-				node = node.left
-			} else {
-				if node.left.weight > node.right.weight {
-					node = node.left
-				} else {
-					node = node.right
-				}
-			}
-			if node != nil {
-				deepest = node
-			}
-		}
-	}
-	replacement = deepest
-	if replacement != nil {
-		for node := replacement; node != nil; node = node.parent {
-			node = node.balance()
-			if node != nil {
-				replacement = node
-			}
-		}
-	}
-	return replacement
 }
 
 func (t *BinaryTree) Find(value int) (index int, ok bool) {
