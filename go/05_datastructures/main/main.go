@@ -4,6 +4,8 @@ import (
 	"datastructures"
 	"fmt"
 	"math/rand"
+	"os"
+	"strconv"
 	"time"
 )
 
@@ -11,12 +13,23 @@ func main() {
 	fmt.Println("Datastructures")
 	fmt.Println()
 
-	// Linked List
-	list := datastructures.NewList()
 	size := 10
+	if len(os.Args) > 1 {
+		i, err := strconv.Atoi(os.Args[1])
+		if err != nil {
+			fmt.Printf("Invalid size: %s\n", os.Args[1])
+			os.Exit(1)
+		}
+		size = i
+	}
+	fmt.Printf("size: %d\n", size)
 	rand.Seed(time.Now().UnixNano())
+	start := time.Now().UnixMilli()
+
+	fmt.Println("============ Linked List ============")
+	list := datastructures.NewList()
 	for i := 0; i < size; i++ {
-		value := rand.Intn(99) + 1
+		value := rand.Intn(size)
 		if value%2 == 0 {
 			fmt.Printf("Adding %2d to list...\n", value)
 			list.Add(value)
@@ -39,8 +52,9 @@ func main() {
 		}
 		fmt.Printf("list.Get(%d): %d\n", i, value)
 	}
-	for i := 0; i < 10*size; i++ {
-		value := rand.Intn(99) + 1
+	for i := 0; i < size; i++ {
+		//value := rand.Intn(size)
+		value := i
 		fmt.Printf("Searching for %d...", value)
 		index, ok := list.Find(value)
 		if ok {
@@ -49,6 +63,7 @@ func main() {
 			fmt.Printf(" not found\n")
 		}
 	}
+	fmt.Printf("list: %s\n", list.String())
 	fmt.Printf("Removing first node...\n")
 	list.Remove(0)
 	fmt.Printf("list size: %d\n", list.Size())
@@ -61,11 +76,12 @@ func main() {
 	list.Remove(list.Size() - 1)
 	fmt.Printf("list size: %d\n", list.Size())
 	fmt.Printf("list: %s\n", list.String())
+	fmt.Println()
 
-	// Queue
+	fmt.Println("============ Queue ============")
 	queue := datastructures.NewQueue()
 	for i := 0; i < size; i++ {
-		value := rand.Intn(99) + 1
+		value := rand.Intn(size)
 		fmt.Printf("Adding %2d to queue...\n", value)
 		queue.Enqueue(value)
 	}
@@ -85,10 +101,10 @@ func main() {
 	}
 	fmt.Println()
 
-	// Stack
+	fmt.Println("============ Stack ============")
 	stack := datastructures.NewStack()
 	for i := 0; i < size; i++ {
-		value := rand.Intn(99) + 1
+		value := rand.Intn(size)
 		fmt.Printf("Adding %2d to stack...\n", value)
 		stack.Push(value)
 	}
@@ -108,26 +124,17 @@ func main() {
 	}
 	fmt.Println()
 
-	// Binary Tree
+	fmt.Println("============ Binary Tree ============")
 	tree := datastructures.NewTree()
 	for i := 0; i < size; i++ {
-		value := rand.Intn(99) + 1
-		fmt.Printf("Adding %2d to tree...\n", value)
+		//value := i
+		value := rand.Intn(size)
+		//fmt.Printf("Adding %d...\n", value)
 		tree.Add(value)
 	}
-	fmt.Printf("tree size: %d\n", tree.Size())
 	fmt.Printf("tree: %s\n", tree.String())
-	for i := 0; i < 10*size; i++ {
-		value := rand.Intn(99) + 1
-		fmt.Printf("Searching for %d...", value)
-		index, ok := tree.Find(value)
-		if ok {
-			fmt.Printf(" found at index %d\n", index)
-		} else {
-			fmt.Printf(" not found\n")
-		}
-	}
-	fmt.Printf("tree: %s\n", tree.String())
+	tree.Print()
+	fmt.Println()
 	for i := 0; i < tree.Size(); i++ {
 		value, err := tree.Get(i)
 		if err != nil {
@@ -137,17 +144,23 @@ func main() {
 		fmt.Printf("tree.Get(%d): %d\n", i, value)
 	}
 	for i := 0; tree.Size() > 0; i++ {
-		value := rand.Intn(99) + 1
+		//value := i
+		value := rand.Intn(size)
 		_, ok := tree.Find(value)
 		if !ok {
 			continue
 		}
 		fmt.Printf("Removing %d...\n", value)
-		err := tree.Remove(value)
-		if err != nil {
-			fmt.Printf("Error: %v\n", err)
+		tree.Remove(value)
+		if size <= 100 || i%100 == 0 || i%100 == 1 {
+			tree.Print()
+			fmt.Println()
 		}
-		fmt.Printf("tree: %s\n", tree.String())
 	}
+	end := time.Now().UnixMilli()
 	fmt.Println()
+	fmt.Printf("Time taken: %dms\n", end-start)
+	fmt.Printf("Balances: %d\n", datastructures.Balances)
+	fmt.Printf("Rotations: %d\n", datastructures.Rotations)
+
 }
