@@ -53,7 +53,7 @@ func (n *treeNode) add(value int) *treeNode {
 			n.right.add(value)
 		}
 	}
-	return n.balance()
+	return n.rebalance()
 }
 
 func (t *BinaryTree) Remove(value int) error {
@@ -93,35 +93,31 @@ func (n *treeNode) remove(value int) (*treeNode, error) {
 func (n *treeNode) delete() *treeNode {
 	//fmt.Printf("*** %d.delete()\n", n.value)
 	var replacement *treeNode
-	var deepest *treeNode
 	if n.left == nil {
 		replacement = n.right
-		deepest = replacement
 	} else if n.right == nil {
 		replacement = n.left
-		deepest = replacement
 	} else {
-		if n.left.weight < n.right.weight {
-			replacement = n.right
-			leftmost := replacement
-			for node := replacement.left; node != nil; node = node.left {
-				leftmost = node
+		if n.left.weight > n.right.weight {
+			for n.left.right != nil {
+				n.left.srl()
+				n.left.left.rebalance()
 			}
-			leftmost.left = n.left
-			leftmost.left.parent = leftmost
-			deepest = leftmost.left
-		} else {
 			replacement = n.left
-			rightmost := replacement
-			for node := replacement.right; node != nil; node = node.right {
-				rightmost = node
+			replacement.right = n.right
+			replacement.right.parent = replacement
+		} else {
+			for n.right.left != nil {
+				n.right.srr()
+				n.right.right.rebalance()
 			}
-			rightmost.right = n.right
-			rightmost.right.parent = rightmost
-			deepest = rightmost.right
+			replacement = n.right
+			replacement.left = n.left
+			replacement.left.parent = replacement
 		}
 	}
 	if replacement != nil {
+		replacement = replacement.rebalance()
 		replacement.parent = n.parent
 	}
 	if n.parent != nil {
@@ -130,39 +126,28 @@ func (n *treeNode) delete() *treeNode {
 		} else {
 			n.parent.right = replacement
 		}
-		if replacement == nil {
-			replacement = n.parent
-			deepest = replacement
-		}
 	}
-	if deepest != nil {
-		for node := deepest; node != nil; {
-			if node.left == nil {
-				node = node.right
-			} else if node.right == nil {
-				node = node.left
-			} else {
-				if node.left.weight > node.right.weight {
-					node = node.left
-				} else {
-					node = node.right
-				}
-			}
-			if node != nil {
-				deepest = node
-			}
-		}
+	if replacement == nil {
+		replacement = n.parent
 	}
-	replacement = deepest
-	if replacement != nil {
-		for node := replacement; node != nil; node = node.parent {
-			node = node.balance()
-			if node != nil {
-				replacement = node
-			}
+	for node := replacement; node != nil; node = node.parent {
+		node = node.rebalance()
+		if node != nil {
+			replacement = node
 		}
 	}
 	return replacement
+}
+
+func (n *treeNode) root() *treeNode {
+	if n == nil {
+		return nil
+	}
+	root := n
+	for ; n.parent != nil; n = n.parent {
+		root = n.parent
+	}
+	return root
 }
 
 const tolerance = 25
@@ -170,16 +155,31 @@ const tolerance = 25
 var Balances int = 0
 var Rotations int = 0
 
+func (n *treeNode) rebalance() *treeNode {
+	if n.left != nil {
+		n.left.adjustWeight()
+	}
+	if n.right != nil {
+		n.right.adjustWeight()
+	}
+	n.adjustWeight()
+	node := n
+	for ; !node.isBalanced(); node = node.balance() {
+	}
+	return node
+}
+
 func (n *treeNode) balance() *treeNode {
 	//fmt.Printf("*** %d.balance()\n", n.value)
 	Balances++
 	if n.left == nil && n.right == nil {
-		// Do nothing, but drop through to re-balance...
+		// Do nothing, but drop through to adjust weights...
 	} else if n.left == nil {
 		if n.right.weight > 1 {
 			if n.right.left != nil {
 				// Double rotation
 				n.right.srr()
+				n.right.right.rebalance()
 			}
 			return n.srl()
 		}
@@ -188,6 +188,7 @@ func (n *treeNode) balance() *treeNode {
 			if n.left.right != nil {
 				// Double rotation
 				n.left.srl()
+				n.left.left.rebalance()
 			}
 			return n.srr()
 		}
@@ -198,6 +199,7 @@ func (n *treeNode) balance() *treeNode {
 				if n.right.right == nil || n.right.left.weight > n.right.right.weight {
 					// Double rotation
 					n.right.srr()
+					n.right.right.rebalance()
 				}
 			}
 			return n.srl()
@@ -206,6 +208,7 @@ func (n *treeNode) balance() *treeNode {
 				if n.left.left == nil || n.left.right.weight > n.left.left.weight {
 					// Double rotation
 					n.left.srl()
+					n.left.left.rebalance()
 				}
 			}
 			return n.srr()
@@ -219,6 +222,28 @@ func (n *treeNode) balance() *treeNode {
 	}
 	n.adjustWeight()
 	return n
+}
+
+func (n *treeNode) isBalanced() bool {
+	if n == nil {
+		return true
+	}
+	if n.left == nil && n.right == nil {
+		return true
+	}
+	if n.left == nil && n.right.weight > 1 {
+		return false
+	}
+	if n.right == nil && n.left.weight > 1 {
+		return false
+	}
+	if n.left != nil && n.right != nil {
+		percent := 100 * n.left.weight / (n.left.weight + n.right.weight)
+		if percent < tolerance || percent > 100-tolerance {
+			return false
+		}
+	}
+	return true
 }
 
 func (n *treeNode) srl() *treeNode {
@@ -375,14 +400,15 @@ func (n *treeNode) slice() []int {
 
 func (t *BinaryTree) Print() {
 	if t.root == nil {
+		fmt.Printf("◁\n")
 		return
 	}
 	if t.root.right != nil {
-		t.root.right.print(true, "")
+		t.root.right.print(true, " ")
 	}
-	fmt.Printf("%d(%d)\n", t.root.value, t.root.weight)
+	fmt.Printf("◁%d(%d)\n", t.root.value, t.root.weight)
 	if t.root.left != nil {
-		t.root.left.print(false, "")
+		t.root.left.print(false, " ")
 	}
 }
 
@@ -409,4 +435,25 @@ func (n *treeNode) print(isRight bool, indent string) {
 		}
 		n.left.print(false, indent+addIndent)
 	}
+}
+
+func (t *BinaryTree) Depth() int {
+	if t.size <= 2 {
+		return t.size
+	}
+	return t.root.depth()
+}
+
+func (n *treeNode) depth() int {
+	depth := 1
+	if n.left != nil {
+		depth = 1 + n.left.depth()
+	}
+	if n.right != nil {
+		d := 1 + n.right.depth()
+		if d > depth {
+			depth = d
+		}
+	}
+	return depth
 }
