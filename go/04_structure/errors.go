@@ -11,12 +11,15 @@ func main() {
 	fmt.Println()
 
 	// Invalid values
-	//x := -123
-	//x := 999
-	//y := 0
-	//y := -1
-	//y := 12
-	//y := 3
+	//x := -123 // errors.New
+	//x := 999  // fmt.Errorf
+	//x := 13   // Sentinel error
+	//y := 0 // MyError
+	//y := -1 // MyOtherError
+	//y := 12 // errors.New wrapped in fmt.Errorf
+	//y := 3 // MyError wrapped in MyWrappingError
+	//y := 6 // Sentinel error wrapped in MyWrappingError
+	//y := 8 // Two levels of wrapping
 	// Valid values
 	x := 9
 	y := 4
@@ -40,13 +43,32 @@ func main() {
 		fmt.Println(err)
 		// But it's more common to use Printf
 		fmt.Printf("Error: %v\n", err)
-		var e MyOtherError
-		if errors.As(err, &e) {
-			fmt.Printf("Code: %d\n", e.Code)
+
+		// Check if the err is the sentinel one
+		if err == ErrSentinel {
+			fmt.Println("Error is the sentinel error")
 		}
+		// Check if the error is or wraps the sentinel one
+		if errors.Is(err, ErrSentinel) {
+			fmt.Println("Error has the sentinel error somewhere in its chain")
+		}
+
+		// Check if the error or any error it wraps is of a certain type
+		var me MyError
+		if errors.As(err, &me) {
+			fmt.Println("Error is of type MyError")
+		}
+		var moe MyOtherError
+		if errors.As(err, &moe) {
+			fmt.Printf("Error is of type MyOtherError. Code: %d\n", moe.Code)
+		}
+
+		// Check if the error wraps other errors
 		if wrappedErr := errors.Unwrap(err); wrappedErr != nil {
 			fmt.Printf("Wrapped error: %v\n", wrappedErr)
 		}
+
+		// Exit with value 1, since an error occurred
 		os.Exit(1)
 	}
 	fmt.Println("No error 🙂")
@@ -66,29 +88,45 @@ func div(numerator, denominator int) (int, int, error) {
 		// Using fmt.Errorf to create an error
 		return 0, 0, fmt.Errorf("numerator is too large: %d", numerator)
 	}
+	if numerator == 13 {
+		// Using a sentinel error
+		return 0, 0, ErrSentinel
+	}
 	if denominator == 0 {
-		// Using fmt.Errorf to wrap an error
-		e := errors.New("wrapped error")
-		return 0, 0, fmt.Errorf("denominator is zero: %d, root cause: %w", denominator, e)
+		// Using my custom error
+		return 0, 0, MyError("denominator is zero")
 	}
 	if denominator < 0 {
-		// Using my custom error
-		return 0, 0, MyError("denominator is negative")
-	}
-	if denominator >= 10 {
 		// Using my other custom error, with an error code
-		return 0, 0, MyOtherError{99, "denominator is too large"}
+		return 0, 0, MyOtherError{99, "denominator is negative"}
+	}
+	if denominator > 10 {
+		// Using fmt.Errorf with %w to wrap an error
+		e := errors.New("wrapped error")
+		return 0, 0, fmt.Errorf("denominator is too large: %d, root cause: %w", denominator, e)
 	}
 	if denominator%2 == 1 {
 		// Using a custom wrapping error
 		e := MyError("wrapped error")
 		return 0, 0, MyWrappingError{"denominator is not even", e}
 	}
+	if denominator == 6 {
+		// Using a sentinel wrapping error
+		return 0, 0, MyWrappingError{"denominator is six", ErrSentinel}
+	}
+	if denominator == 8 {
+		// Using two levels of wrapping
+		e := fmt.Errorf("wrapped error wrapping error: %w", ErrSentinel)
+		return 0, 0, MyWrappingError{"denominator is eight", e}
+	}
 	// Note that error messages must not be capitalized nor end with punctuation or a newline
 	result := numerator / denominator
 	remainder := numerator % denominator
 	return result, remainder, nil
 }
+
+// Sentinel errors are declared at package level
+var ErrSentinel = errors.New("Sentinel error")
 
 // A custom error
 type MyError string
