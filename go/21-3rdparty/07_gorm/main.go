@@ -72,6 +72,10 @@ func main() {
 		fmt.Printf("Failed to connect to database. Error: %v\n", err)
 		return
 	}
+	defer func() {
+		fmt.Println("Closing connection...")
+		db.Close()
+	}()
 	fmt.Printf("Connected to db: %v\n", db)
 
 	kittyTenantID := "99999999999999999999999999"
@@ -93,6 +97,7 @@ func main() {
 	}
 	fmt.Printf("Selected organization link: %v\n", organizationLink)
 
+	fmt.Println("Done.")
 }
 
 // TableName, if present, is used by Gorm to determine the database table name.
