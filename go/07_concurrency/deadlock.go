@@ -14,6 +14,9 @@ type value struct {
 var wg sync.WaitGroup
 
 func main() {
+	fmt.Printf("Concurrency - deadlock\n")
+	fmt.Println()
+
 	var a, b value
 	wg.Add(2)
 	go printSum(&a, &b)
@@ -31,7 +34,7 @@ func printSum(a, b *value) {
 	defer b.mutex.Unlock()
 	sum := a.value + b.value
 	fmt.Printf("%d + %d = %d\n", a.value, b.value, sum)
-	}
+}
 
 func pause(millis time.Duration) {
 	time.Sleep(millis * time.Millisecond)

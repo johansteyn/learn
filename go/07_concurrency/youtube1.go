@@ -7,7 +7,7 @@ import (
 
 // https://www.youtube.com/watch?v=yNOe3STbtGE
 func main() {
-	fmt.Printf("Concurrency on Youtube(1)\n")
+	fmt.Printf("Concurrency - youtube(1)\n")
 	fmt.Println()
 
 	// In a single thread, no refunds get processed until ALL orders have been processed
@@ -24,7 +24,7 @@ func main() {
 	// A naive way of blocking...
 	//go process("order", 1_000_000, 500)
 	//go process("refund", 6, 200)
-	//// Wait for a return key press 
+	//// Wait for a return key press
 	//fmt.Scanln()
 	//fmt.Println("Done")
 
