@@ -9,38 +9,13 @@ import (
 	_ "github.com/lib/pq" // https://stackoverflow.com/questions/52789531/how-do-i-solve-panic-sql-unknown-driver-postgres-forgotten-import
 )
 
-type Application struct {
-	KittyTenantID       string    `gorm:"column:kitty_tenant_id;primary_key"`
-	AcmePartnerTenantID string    `gorm:"column:acme_partner_tenant_id;unique_index:acme_tenant"`
-	RedirectURL         string    `gorm:"column:redirect_url"`
-	CompanyName         string    `gorm:"column:company_name"`
-	Version             string    `gorm:"column:application_version"`
-	RequiredVSAVersion  string    `gorm:"column:required_vsa_version"`
-	Copyright           string    `gorm:"column:application_copyright"`
-	ID                  uint32    `gorm:"column:application_id"`
-	KittyServerAddress  string    `gorm:"column:authorization_server"`
-	Authorized          bool      `gorm:"column:authorized"`
-	TicketSync          bool      `gorm:"column:ticket_sync"`
-	CreatedAt           time.Time `gorm:"column:created_at"`
-}
-
-type OrganizationLink struct {
-	KittyTenantID         string    `gorm:"column:kitty_tenant_id;primary_key"`
-	KittyOrganizationID   string    `gorm:"column:kitty_organization_id;primary_key;unique"`
-	KittyOrganizationName string    `gorm:"column:kitty_organization_name"`
-	AcmePartnerID         string    `gorm:"column:acme_partner_id;primary_key"`
-	AcmeCustomerID        string    `gorm:"column:acme_customer_id;primary_key"`
-	AcmeCustomerName      string    `gorm:"column:acme_customer_name"`
-	ProtectionEdition     string    `gorm:"column:acme_protection_edition"`
-	InstallAgents         bool      `gorm:"column:install_agents"`
-	ApplyDefaultPlan      bool      `gorm:"column:apply_default_protection_plans"`
-	AlertsSynchronization bool      `gorm:"column:alerts_synchronization"`
-	Devices               uint      `gorm:"column:devices"`
-	Protected             uint      `gorm:"column:protected"`
-	ID                    string    `gorm:"column:id;unique"`
-	CreatedAt             time.Time `gorm:"column:created_at"`
-	UpdatedAt             time.Time `gorm:"column:updated_at"`
-	//DeletedAt              time.Time `gorm:"column:deleted_at"`
+type Customer struct {
+	Name      string    `gorm:"column:name;primary_key"`
+	Age       int       `gorm:"column:age"`
+	CreatedAt time.Time `gorm:"column:created_at"`
+	UpdatedAt time.Time `gorm:"column:updated_at"`
+	// TODO: Explore the DeletedAt field...
+	//DeletedAt time.Time `gorm:"column:deleted_at"`
 	//DeletedAt *time.Time `sql:"index"`
 	//DeletedAt time.Time `sql:"index"`
 	//DeletedAt time.Time
@@ -53,9 +28,9 @@ func main() {
 
 	host := "localhost"
 	port := "5432"
-	user := "ci_kitty"
-	dbname := "cyber_ci_kitty"
-	password := "8f40a8a58506fc51b0d2ce1f30be3d08"
+	user := "johan"
+	dbname := "mydb"
+	password := "LinuxVM123"
 	if len(os.Args) == 6 {
 		host = os.Args[1]
 		port = os.Args[2]
@@ -69,43 +44,132 @@ func main() {
 	fmt.Printf("*** dbURI: %s\n", dbURI)
 	db, err := gorm.Open("postgres", dbURI)
 	if err != nil {
-		fmt.Printf("Failed to connect to database. Error: %v\n", err)
-		return
+		handleError("Failed to connect to database.", err)
 	}
 	defer func() {
+		// TODO: Drop table?
 		fmt.Println("Closing connection...")
 		db.Close()
 	}()
 	fmt.Printf("Connected to db: %v\n", db)
+	fmt.Println()
 
-	kittyTenantID := "99999999999999999999999999"
-	fmt.Println("Selecting application...")
-	application := Application{}
-	err = db.Model(application).Where("kitty_tenant_id = ?", kittyTenantID).Find(&application).Error
-	if err != nil {
-		fmt.Printf("Failed to select. Error: %v\n", err)
-		return
-	}
-	fmt.Printf("Selected application: %v\n", application)
+	fmt.Println("Creating tables...")
+	db.AutoMigrate(&Customer{})
+	fmt.Println()
 
-	fmt.Println("Selecting organization link...")
-	organizationLink := OrganizationLink{}
-	err = db.Model(organizationLink).Where("kitty_tenant_id = ?", kittyTenantID).Find(&organizationLink).Error
-	if err != nil {
-		fmt.Printf("Failed to select. Error: %v\n", err)
-		return
+	fmt.Println("Inserting rows...")
+	// Gorm functions typically return a value of type *gorm.DB,
+	// which contains an Error field that needs to be checked.
+	result := db.Create(&Customer{Name: "Alice", Age: 42})
+	fmt.Printf("Result: %#v\n", result)
+	fmt.Printf("Inserted %d rows\n", result.RowsAffected)
+	if result.Error != nil {
+		handleError("Failed to insert row.", err)
 	}
-	fmt.Printf("Selected organization link: %v\n", organizationLink)
+	// A more idiomatic way to check for errors...
+	err = db.Create(&Customer{Name: "Bob", Age: 64}).Error
+	if err != nil {
+		handleError("Failed to insert row.", err)
+	}
+	// Even more idiomatic? (I prefer the one above)
+	if err = db.Create(&Customer{Name: "Carol", Age: 16}).Error; err != nil {
+		handleError("Failed to insert row.", err)
+	}
+	fmt.Println()
+
+	fmt.Println("Selecting first row...")
+	firstCustomer := Customer{}
+	result = db.First(&firstCustomer)
+	fmt.Printf("Result: %#v\n", result)
+	err = result.Error
+	if err != nil {
+		handleError("Failed to select first row.", err)
+	}
+	fmt.Printf("Found %d rows\n", result.RowsAffected)
+	fmt.Printf("First row: %v\n", firstCustomer)
+	fmt.Println()
+
+	fmt.Println("Selecting last row...")
+	lastCustomer := Customer{}
+	result = db.Last(&lastCustomer)
+	fmt.Printf("Result: %#v\n", result)
+	err = result.Error
+	if err != nil {
+		handleError("Failed to select last row.", err)
+	}
+	fmt.Printf("Found %d rows\n", result.RowsAffected)
+	fmt.Printf("Last row: %v\n", lastCustomer)
+	fmt.Println()
+
+	fmt.Println("Selecting specific row...")
+	name := "Bob"
+	customer := Customer{}
+	result = db.Model(customer).Where("name = ?", name).Find(&customer)
+	fmt.Printf("Result: %#v\n", result)
+	err = result.Error
+	if err != nil {
+		handleError("Failed to select specific row.", err)
+	}
+	fmt.Printf("Found %d rows\n", result.RowsAffected)
+	fmt.Printf("Customer: %v\n", customer)
+	fmt.Println()
+
+	fmt.Println("Updating...")
+	customer.Age = 65
+	result = db.Save(&customer)
+	fmt.Printf("Result: %#v\n", result)
+	fmt.Printf("Updated %d rows\n", result.RowsAffected)
+	if result.Error != nil {
+		handleError("Failed to update row.", err)
+	}
+
+	// Save will insert a new row if it doesn't exist yet...
+	customer.Name = "Dave"
+	customer.Age = 32
+	result = db.Save(&customer)
+	fmt.Printf("Result: %#v\n", result)
+	fmt.Printf("Updated %d rows\n", result.RowsAffected)
+	if result.Error != nil {
+		handleError("Failed to update row.", err)
+	}
+	fmt.Println()
+
+	fmt.Println("Deleting...")
+	customer.Name = "Carol"
+	db.Delete(&customer)
+	fmt.Println()
+
+	fmt.Println("Selecting all rows...")
+	customers := []Customer{}
+	result = db.Find(&customers)
+	fmt.Printf("Result: %#v\n", result)
+	err = result.Error
+	if err != nil {
+		handleError("Failed to select all rows.", err)
+	}
+	fmt.Printf("Found %d rows\n", result.RowsAffected)
+	for i, customer := range customers {
+		fmt.Printf("  Customer #%d: %v\n", i, customer)
+	}
+	fmt.Println()
+
+	fmt.Println("Dropping table...")
+	db.DropTable(&Customer{})
+	fmt.Println()
 
 	fmt.Println("Done.")
 }
 
 // TableName, if present, is used by Gorm to determine the database table name.
-// Otherwise it will derive table name "applications" from the type name "Application"
-func (a *Application) TableName() string {
-	return "kitty_applications"
+// Otherwise it will derive table name "customers" from the type name "Customer",
+// or table name "shopping_baskets" from the type name "ShoppingBasket"
+func (a *Customer) TableName() string {
+	return "gorm_customers"
 }
 
-func (o *OrganizationLink) TableName() string {
-	return "organization_links"
+func handleError(message string, err error) {
+	fmt.Print(message)
+	fmt.Printf(" Error: %v\n", err)
+	os.Exit(1)
 }
