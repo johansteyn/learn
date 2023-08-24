@@ -8,6 +8,9 @@ import (
 // % go build race.go
 // % while true; do race; sleep 1; done
 func main() {
+	fmt.Printf("Concurrency - race\n")
+	fmt.Println()
+
 	n := 0
 	go inc(&n)
 	// By pausing and printing we allow enough time for the function call to complete,
