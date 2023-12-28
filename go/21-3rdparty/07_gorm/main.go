@@ -7,6 +7,7 @@ import (
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq" // https://stackoverflow.com/questions/52789531/how-do-i-solve-panic-sql-unknown-driver-postgres-forgotten-import
+	"github.com/pkg/errors"
 )
 
 type Customer struct {
@@ -137,7 +138,41 @@ func main() {
 
 	fmt.Println("Deleting...")
 	customer.Name = "Carol"
-	db.Delete(&customer)
+	err = delete(db, &customer)
+	if err != nil {
+		handleError("Failed to delete 'Carol'", err)
+	}
+	fmt.Println()
+
+	fmt.Println("Deleting in a DB transaction...")
+	err = db.Transaction(func(tx *gorm.DB) error {
+		// This should work because "Alice" still exists
+		fmt.Println("Deleting 'Alice'... (should succeed)")
+		fmt.Println("")
+		customer.Name = "Alice"
+		// Note that we pass the tx - not the db
+		err = delete(tx, &customer)
+		if err != nil {
+			return err
+		}
+		// This should fail because "Edgar" does not exust
+		fmt.Println("Deleting 'Edgar'... (should fail, rolling back delete of 'Alice')")
+		customer.Name = "Edgar"
+		err = delete(tx, &customer)
+		if err != nil {
+			// Returning an error will rollback the delete of "Alice"
+			fmt.Println("Rollback...")
+			return err
+		}
+		// Returning nil will commit the transaction, ie. both the deletes
+		fmt.Println("Commit.")
+		return nil
+	})
+	if err != nil {
+		//handleError("Failed to delete both 'Alice' and 'Edgar'", err)
+		fmt.Printf("Failed to delete both 'Alice' and 'Edgar' Error: %v\n", err)
+		fmt.Println("Continuing as error is expected...")
+	}
 	fmt.Println()
 
 	fmt.Println("Selecting all rows...")
@@ -172,4 +207,16 @@ func handleError(message string, err error) {
 	fmt.Print(message)
 	fmt.Printf(" Error: %v\n", err)
 	os.Exit(1)
+}
+
+// Using a separate function because Gorm's Delete function does not return an error
+// https://stackoverflow.com/questions/67154864/how-to-handle-gorm-error-at-delete-function
+func delete(db *gorm.DB, customer *Customer) error {
+	db = db.Delete(&customer)
+	if db.Error != nil {
+		return db.Error
+	} else if db.RowsAffected < 1 {
+		return errors.New("row cannot be deleted because it doesn't exist")
+	}
+	return nil
 }
