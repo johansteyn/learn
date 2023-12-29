@@ -148,7 +148,6 @@ func main() {
 	err = db.Transaction(func(tx *gorm.DB) error {
 		// This should work because "Alice" still exists
 		fmt.Println("Deleting 'Alice'... (should succeed)")
-		fmt.Println("")
 		customer.Name = "Alice"
 		// Note that we pass the tx - not the db
 		err = delete(tx, &customer)
