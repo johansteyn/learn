@@ -28,9 +28,12 @@ func main() {
 	ctx = context.WithValue(ctx, "key1", "value1")
 	doSomethingMore(ctx)
 
+	// Three ways to end a context: with Cancel, Deadline or Timeout
 	doSomethingWithCancel(ctx)
-
 	doSomethingWithDeadline(ctx)
+	doSomethingWithTimeout(ctx)
+
+	// TODO: AfterFunc, *Cause functions and WithoutCancel...
 
 	fmt.Println("Done.")
 }
@@ -61,22 +64,28 @@ func doSomethingWithCancel(ctx context.Context) {
 		time.Sleep(4 * time.Second)
 		cancelFunc()
 	}(cancelFunc)
-
 	work(ctx)
 }
 
 func doSomethingWithDeadline(ctx context.Context) {
-	fmt.Println("Doing something within a deadline...")
+	fmt.Println("Doing something with a deadline...")
 	tenSeconds := 10 * time.Second
 	deadline := time.Now().Add(tenSeconds)
 	// WithDeadline also returns a cancel function, but we're ignoring it.
 	ctx, _ = context.WithDeadline(ctx, deadline)
+	work(ctx)
+}
 
+func doSomethingWithTimeout(ctx context.Context) {
+	fmt.Println("Doing something with a timeout...")
+	timeout := 8 * time.Second
+	// WithTimeout is similar to WIthDeadline, but takes a duration not a specific time.
+	ctx, _ = context.WithTimeout(ctx, timeout)
 	work(ctx)
 }
 
 func work(ctx context.Context) {
-	fmt.Println("Doing some work...")
+	fmt.Println("Working:")
 	for i := 0; i < 10; i++ {
 		fmt.Printf("  LOOP #%d: ", i)
 		time.Sleep(time.Second)
