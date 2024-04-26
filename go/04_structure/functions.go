@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-// Format of function declaration: 
+// Format of function declaration:
 //  func <name>([<params...>]) <return types> {...}
 
 // The entry function for Go programs is called "main"
@@ -38,14 +38,14 @@ func main() {
 	fmt.Println()
 
 	// Functions are values
-	var functions = []func(int, int)int{add, sub, mul, div}
+	var functions = []func(int, int) int{add, sub, mul, div}
 	for i, f := range functions {
 		fmt.Printf("function #%d: %d\n", i, f(9, 3))
 	}
 	fmt.Println()
 
 	// Same as above, but using a "type" for readability
-	type mathfunc func(int, int)int
+	type mathfunc func(int, int) int
 	mathfuncs := []mathfunc{add, sub, mul, div}
 	for i, f := range mathfuncs {
 		fmt.Printf("function #%d: %d\n", i, f(9, 3))
@@ -53,9 +53,9 @@ func main() {
 	fmt.Println()
 
 	// Anonymous function
-	n := func(a int, b int)int {
+	n := func(a int, b int) int {
 		return a / b
-	}(42, 7) // Invoked immediately with parameter values 42 and 7 
+	}(42, 7) // Invoked immediately with parameter values 42 and 7
 	fmt.Printf("Anonymous function returned %d\n", n)
 	// This in itself isn't useful - anonymous functions are more useful with "defer" (TODO...)
 	fmt.Println()
@@ -116,7 +116,8 @@ func flybar(a, b int) (x, y int) {
 // So, named return values are not very useful, but they are needed with "defer" (TODO...)
 // Again, not recommended - pointless naming return variables that are not used
 // Q: Why does Go even allow this?
-//    Unused variables normally result in compile errors...
+//
+//	Unused variables normally result in compile errors...
 func barfly(a, b int) (x, y int) {
 	return b, a
 }
@@ -134,7 +135,7 @@ func print(xs ...int) {
 func inc(value int, xs ...int) []int {
 	inxs := make([]int, 0, len(xs))
 	for _, x := range xs {
-		inxs = append(inxs, x + value)
+		inxs = append(inxs, x+value)
 	}
 	return inxs
 }
@@ -153,26 +154,63 @@ func mul(a, b int) int {
 }
 
 // Note that the return type can be in parentheses
-func div(a int, b int)(int) {
+func div(a int, b int) int {
 	return a / b
 }
 
 // Function that returns an anonymous inner function
-func outer(x int) func()int {
-	return func()int {
+func outer(x int) func() int {
+	return func() int {
 		// The inner function "captures" parameter x, forming a "closure"
 		x += 1
 		return x
 	}
 }
 
-func cleanup() {
-	fmt.Println("Cleanup")
+func cleanup1() {
+	fmt.Println("Cleanup1")
 }
 
+func cleanup2() {
+	fmt.Println("Cleanup2")
+}
+
+// Deferred functions are only called when this function returns
+// They are called in reverse order (from last to first),
+// as per page 144 of "The Go Programming Language"
 func dirty() {
-	defer cleanup()
-	// The cleanup function will only get called when this function returns...
+	// Defering directly
+	defer cleanup1()
+	defer cleanup2()
+
+	// Defering via local variables
+	f := cleanup1
+	defer f()
+	f = cleanup2
+	defer f()
+
+	// Defering via anonymous functions (so that we can do some extra work)
+	f = cleanup1
+	defer func() {
+		fmt.Println("Extra1")
+		// Careful... it will call cleanup2 - not cleanup1
+		f()
+	}()
+	f = cleanup2
+	defer func() {
+		fmt.Println("Extra2")
+		f()
+	}()
+
+	defer func(f func()) {
+		fmt.Println("Extra1")
+		f()
+	}(cleanup1)
+	defer func(f func()) {
+		fmt.Println("Extra2")
+		f()
+	}(cleanup2)
+
 	fmt.Println("Dirty")
 }
 
@@ -184,4 +222,3 @@ func recursive(i int) {
 		fmt.Println()
 	}
 }
-
