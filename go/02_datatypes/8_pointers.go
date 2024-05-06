@@ -28,6 +28,7 @@ func main() {
 	// And cannot be dereferenced until it is assigned a value
 	//fmt.Printf("*sptr=%v (%T)\n", *sptr, *sptr)
 	s := "The quick brown fox"
+	fmt.Printf("s=%s (%T)\n", s, s)
 	sptr = &s
 	fmt.Printf("sptr=%v (%T)\n", sptr, sptr)
 	fmt.Printf("*sptr=%v (%T)\n", *sptr, *sptr)
@@ -68,19 +69,51 @@ func main() {
 	fmt.Printf("*sptr=%v (%T)\n", *sptr, *sptr)
 	fmt.Println()
 
-	// Go uses copy by value, 
-	// ie. the the value passed to a function is copied to the parameter variable 
+	// Pass by value (copy)
+	// The value passed to a function is copied to the parameter variable
 	// Therefore, changing the parameter value has no effect on the original value
 	s = "Original value"
 	t := s
-	changeValue(s)
+	passByValue(s)
 	fmt.Printf("s=%v (%T)\n", s, s)
 	fmt.Printf("t=%v (%T)\n", t, t)
+	fmt.Println()
+
+	// Pass by reference (pointer)
 	// To change the original value, use a pointer
 	sptr = &s
-	changePointer(sptr)
+	passByReference(sptr)
 	fmt.Printf("s=%v (%T)\n", s, s)
 	fmt.Printf("t=%v (%T)\n", t, t)
+	fmt.Println()
+
+	// Return by reference (pointer)
+	nameptr, students := returnByReference()
+	fmt.Printf("name=%s\n", *nameptr)
+	fmt.Printf("students=%v\n", students)
+	// Changes the vaues of the global variables
+	*nameptr = "Frederik"
+	students["Alice"] = 22
+	fmt.Printf("name=%s\n", *nameptr)
+	fmt.Printf("students=%v\n", students)
+	nameptr, students = returnByReference()
+	fmt.Printf("name=%s\n", *nameptr)
+	fmt.Printf("students=%v\n", students)
+	fmt.Println()
+
+	// Return by value (copy)
+	name, students := returnByValue()
+	fmt.Printf("name=%s\n", name)
+	fmt.Printf("students=%v\n", students)
+	// Does not change the values of the global variables
+	name = "Steyn"
+	students["Alice"] = 22
+	fmt.Printf("name=%s\n", name)
+	fmt.Printf("students=%v\n", students)
+	name, students = returnByValue()
+	fmt.Printf("name=%s\n", name)
+	fmt.Printf("students=%v\n", students)
+	fmt.Println()
 }
 
 // Utility function to obtain a pointer to a primitive
@@ -90,11 +123,32 @@ func stringp(s string) *string {
 	return &s
 }
 
-func changeValue(s string) {
+func passByValue(s string) {
 	s = "New value"
 }
 
-func changePointer(s *string) {
+func passByReference(s *string) {
 	*s = "New value"
 }
 
+var global_name = "Johan"
+var global_students = map[string]int{
+	"Alice": 21,
+	"Bob":   65,
+	"Carol": 42,
+}
+
+func returnByReference() (*string, map[string]int) {
+	return &global_name, global_students
+}
+
+func returnByValue() (string, map[string]int) {
+	// Since complex types like arrays, slices and maps are always passed
+	// by reference, we need to return a separate copy for each call
+	var local_students = map[string]int{
+		"Alice": 21,
+		"Bob":   65,
+		"Carol": 42,
+	}
+	return global_name, local_students
+}

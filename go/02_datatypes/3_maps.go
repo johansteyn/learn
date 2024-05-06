@@ -24,7 +24,7 @@ func main() {
 	// Creating a map using a non-empty map literal
 	var students = map[string]int{
 		"Alice": 21,
-		"Bob": 65,
+		"Bob":   65,
 		"Carol": 42, // Note that each entry has a comma - even the last one (making it easy to add/remove entries)
 	}
 	fmt.Printf("students=%v (%T)\n", students, students)
@@ -37,7 +37,7 @@ func main() {
 	fmt.Printf("len(students)=%d\n", len(students))
 	// While pets has an initial size, len returns the number of actual entries
 	fmt.Printf("len(pets)=%d\n", len(pets))
-	// The built-in "cap" function doesn't work for maps... 
+	// The built-in "cap" function doesn't work for maps...
 	//fmt.Printf("cap(pets)=%d\n", cap(pets))
 	fmt.Println()
 
@@ -58,7 +58,7 @@ func main() {
 	fmt.Printf("pets[\"Trixie\"]=%v (%T)\n", pets["Trixie"], pets["Trixie"])
 	fmt.Println()
 
-	// But if we get the nil value for a key (in this case, false), 
+	// But if we get the nil value for a key (in this case, false),
 	// is it because it doesn't exist or because it is actually false?
 	// The comma-ok idiom answers this question
 	// Since we know "Bruno" and "Trixie" both return false...
