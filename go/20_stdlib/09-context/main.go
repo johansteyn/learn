@@ -18,7 +18,7 @@ func main() {
 	ctx := context.Background()
 	//ctx := context.TODO()
 	// They are essentially the same, but TODO serves as a temprary placeholder to
-	// indicate during development that you're not yet sure what contetx will be used.
+	// indicate during development that you're not yet sure what context will be used.
 	// Do not use TODO in production code.
 	// And avoid even using Background - rather use WithValue, WithCancel, etc. as the first (parent) context.
 
@@ -45,6 +45,14 @@ func main() {
 	var key1 mykey = "key1"
 	ctx = context.WithValue(ctx, key1, "value3") // The value is not overridden - it's a new, separate key
 	doSomethingMore(ctx)
+	// The value of that custome type key can still be overwritten though...
+	var key2 mykey = "key1"
+	ctx = context.WithValue(ctx, key2, "value4") //  The value for custom key "key1" is overridden by the value for another custom key "key1"
+	doSomethingMore(ctx)
+	// The idea of custom keys not to prevent code in the same package from overwriting each other's values,
+	// but rather to prevent code in different packages from overwriting each other's values.
+	// Using public, native types anyone who gets hold of our context can overwrite our values.
+	// But using private, custom types only code in the same package can overwrite our values.
 
 	// Three ways to end a context: with Cancel, Deadline or Timeout
 	doSomethingWithCancel(ctx)
@@ -70,6 +78,8 @@ func doSomethingElse(ctx context.Context, message string) {
 }
 
 type mykey string
+type mykey1 string
+type mykey2 string
 
 func doSomethingMore(ctx context.Context) {
 	fmt.Println("Doing something more with a context...")
