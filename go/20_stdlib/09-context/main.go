@@ -56,11 +56,11 @@ func main() {
 
 	// Three ways to end a context: with Cancel, Deadline or Timeout
 	doSomethingWithCancel(ctx)
-	doSomethingWithDeadline(ctx)
-	doSomethingWithTimeout(ctx)
-	doSomethingElseWithTimeout(ctx)
-	doSomethingWithMultipleTimeouts(ctx)
-	doSomethingElseWithMultipleTimeouts(ctx)
+	//doSomethingWithDeadline(ctx)
+	//doSomethingWithTimeout(ctx)
+	//doSomethingElseWithTimeout(ctx)
+	//doSomethingWithMultipleTimeouts(ctx)
+	//doSomethingElseWithMultipleTimeouts(ctx)
 
 	// TODO: The AfterFunc, *Cause functions and WithoutCancel functions were added in Go 1.21
 
@@ -188,7 +188,7 @@ func work(ctx context.Context) {
 		default:
 			// The context has not been cancelled, so continue doing work...
 			fmt.Println("doing some work...")
-			time.Sleep(time.Second)
+			time.Sleep(1 * time.Second)
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/signal"
@@ -24,34 +25,60 @@ func main() {
 	fmt.Printf("os.Stdout.Stat(): %s\n", fileInfo)
 	fmt.Printf("Mode: %s\n", fileInfo.Mode())
 	fmt.Printf("os.ModeCharDevice: %s\n", os.ModeCharDevice)
+	fmt.Println()
 
-	// Allow graceful shutdown when the user presses Ctrl+C
-	c := make(chan os.Signal)
-	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-	count = 0
-	go func() {
-		<-c
-		fmt.Printf("Received signal while doing job #%d...\n", count)
-		fmt.Println("Calling shutdown...")
-		shutdown()
-	}()
-	for count = 1; count <= 10; count++ {
-		if shutdownRequested {
-			fmt.Println("Breaking...")
-			break
-		}
-		fmt.Printf("Starting job #%d...\n", count)
-		work(count)
-	}
-	fmt.Println("Sleeping for 4 seconds...")
-	time.Sleep(4 * time.Second)
-	fmt.Println("Completed without interruption.")
+	run1()
+	fmt.Println("Completed run1.")
+	fmt.Println()
+
+	// Need to pause because we're waiting in a seperate thread, otherwise we get:
+	//   panic: sync: WaitGroup is reused before previous Wait has returned
+	pause(4)
+
+	run2()
+	fmt.Println("Completed run2.")
+	fmt.Println()
+
+	pause(4)
+
+	fmt.Println("Done.")
 }
 
 var count int
 var wg sync.WaitGroup
-
 var shutdownRequested bool
+var cancelFunc context.CancelFunc
+
+// A simple way to detect shutdown using a boolean flag
+func run1() {
+	listenForInterrupt(shutdown1)
+	for count = 1; count <= 10; count++ {
+		if shutdownRequested {
+			fmt.Printf("run1: shutdown requested during loop #%d, returning...\n", count)
+			return
+		}
+		fmt.Printf("run1: starting job #%d...\n", count)
+		work(count)
+	}
+}
+
+// A better way to detect shutdown is to use a context
+func run2() {
+	ctx, c := context.WithCancel(context.Background())
+	cancelFunc = c
+	listenForInterrupt(shutdown2)
+	for count = 1; count <= 10; count++ {
+		select {
+		case <-ctx.Done():
+			fmt.Printf("run2: context cancelled during loop #%d, returning...\n", count)
+			return
+		default:
+			fmt.Printf("run2: starting job #%d...\n", count)
+			work(count)
+		}
+	}
+
+}
 
 func work(i int) {
 	wg.Add(1)
@@ -61,12 +88,34 @@ func work(i int) {
 	fmt.Printf("[#%d]Done.\n", i)
 }
 
-func shutdown() {
+// Allow graceful shutdown when the user presses Ctrl+C
+func listenForInterrupt(shutdown func()) {
+	c := make(chan os.Signal)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		fmt.Println("Received signal...")
+		shutdown()
+	}()
+}
+
+func shutdown1() {
+	fmt.Println("shutdown1: setting flag...")
 	shutdownRequested = true
-	fmt.Printf("Shutdown, waiting for job #%d to finish...\n", count)
+	fmt.Printf("shutdown1: waiting for job #%d to finish...\n", count)
 	wg.Wait()
-	// No guarantee that anything will be called after waiting.
-	// But the 4-second sleep in main gives enough time...
-	fmt.Println("Exiting...")
-	os.Exit(0)
+	fmt.Println("Done waiting.")
+}
+
+func shutdown2() {
+	fmt.Println("shutdown2: cancelling...")
+	cancelFunc()
+	fmt.Printf("shutdown2: waiting for job #%d to finish...\n", count)
+	wg.Wait()
+	fmt.Println("Done waiting.")
+}
+
+func pause(seconds int) {
+	fmt.Printf("Sleeping for %d seconds...\n", seconds)
+	time.Sleep(time.Second * time.Duration(seconds))
 }
