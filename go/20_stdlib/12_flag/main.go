@@ -14,14 +14,17 @@ func main() {
 	var vaccinated bool
 
 	// Use functions that return pointers...
-	//name := flag.String("name", "Alice", "Your name")
-	//age := flag.Int("age", 42, "Your age")
-	//vaccinated := flag.Bool("bptr", true, "Are you vaccinated?")
+	namePtr := flag.String("name", "Alice", "Your name")
+	agePtr := flag.Int("age", 21, "Your age")
+	vaccinatedPtr := flag.Bool("vaccinated", true, "Are you vaccinated?")
+	name = *namePtr
+	age = *agePtr
+	vaccinated = *vaccinatedPtr
 
 	// Or use functions that take pointers
-	flag.StringVar(&name, "name", "Alice", "Your name")
-	flag.IntVar(&age, "age", 21, "Your age")
-	flag.BoolVar(&vaccinated, "vaccinated", true, "Are you vaccinated?")
+	//flag.StringVar(&name, "name", "Alice", "Your name")
+	//flag.IntVar(&age, "age", 21, "Your age")
+	//flag.BoolVar(&vaccinated, "vaccinated", true, "Are you vaccinated?")
 
 	// Once all flags are declared, parse them...
 	flag.Parse()
