@@ -57,8 +57,25 @@ then running "tidy" will remove those added entries.
 I cannot see any reason why you would run "go get" on its own when using modules...
 
 NOTE:
-  Go will use the go.mod file in the current folder, or any parent folder.
+Go will use the go.mod file in the current folder, or any parent folder.
 
+Question:
 Should you keep go.mod and go.sum files under version control?
 Yes: https://github.com/golang/go/wiki/Modules
+
+NOTE:
+Learned later that when developing a new app, you can start coding and run "go mod tidy" 
+to add dependencies to the go.mod file. But if you already know that you will depend on
+a particular library before even writing a line of code, you can add that dependency to
+the go.mod file by running "go get", eg. when I was getting ready to write an app that
+would use go-redis:
+  % go mod init mymodule
+  % go get github.com/redis/go-redis/v9
+However, if you then run "go mod tidy" it will remove the just-added dependencies,
+obviously since it will not find any code that uses it.
+So, "go get" is actually still used, if you want to.
+But note that the go.mod file produced by "go get" is somewhat different from that 
+produced by "go mod tidy"...
+So, I will prefer to use "go mod tidy" over "go get".
+
 

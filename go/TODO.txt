@@ -1,0 +1,4 @@
+Explore all the format verbs, especially %q instead of %s for strings...
+  https://pkg.go.dev/fmt
+  https://cs.opensource.google/go/go/+/master:src/fmt/fmt_test.go
+
