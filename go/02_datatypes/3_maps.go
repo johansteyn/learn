@@ -11,14 +11,14 @@ func main() {
 	// Maps
 	// A map is similar to a slice, except it can be indexed by any comparable type, and there is no order.
 	// Since the key must be a comparable type, you cannot use a slice or map as the key.
-	var empty map[string]int // Default nil value for a slice is nil (same as slices)
-	fmt.Printf("empty=%v (%T)\n", empty, empty)
+	var nilMap map[string]int // Default nil value for a slice is nil (same as slices)
+	fmt.Printf("nilMap=%v (%T)\n", nilMap, nilMap)
 	// Like slices, maps cannot be compared to each other, but they can be compared to nil
-	fmt.Printf("empty == nil? %t\n", empty == nil)
+	fmt.Printf("nilMap == nil? %t\n", nilMap == nil)
 	// Creating a map using an empty map literal results in an empty but non-nil map
-	var nonNil = map[string]int{}
-	fmt.Printf("nonNil=%v (%T)\n", nonNil, nonNil)
-	fmt.Printf("nonNil == nil? %t\n", nonNil == nil)
+	var empty = map[string]int{}
+	fmt.Printf("empty=%v (%T)\n", empty, empty)
+	fmt.Printf("empty == nil? %t\n", empty == nil)
 	fmt.Println()
 
 	// Creating a map using a non-empty map literal
@@ -28,11 +28,15 @@ func main() {
 		"Carol": 42, // Note that each entry has a comma - even the last one (making it easy to add/remove entries)
 	}
 	fmt.Printf("students=%v (%T)\n", students, students)
+	fmt.Println()
+
 	// Creating a map using make, and specifying an initial size
 	pets := make(map[string]bool, 10)
+	fmt.Printf("pets=%v (%T)\n", pets, pets)
 	fmt.Println()
 
 	// The built-in "len" function returns the number of key-value pairs
+	fmt.Printf("len(nilMap)=%d\n", len(nilMap))
 	fmt.Printf("len(empty)=%d\n", len(empty))
 	fmt.Printf("len(students)=%d\n", len(students))
 	// While pets has an initial size, len returns the number of actual entries
@@ -83,11 +87,14 @@ func main() {
 	delete(pets, "Trixie")
 	fmt.Println()
 
-	// To iterate through map entries...
+	// To iterate through a map, use a for loop with "range"
+	fmt.Println("Iterating through maps...")
+	fmt.Println("students: ")
 	for k, v := range students {
-		fmt.Printf("key=%v, value=%v\n", k, v)
+		fmt.Printf("  key=%v, value=%v\n", k, v)
 	}
+	fmt.Println("pets: ")
 	for k, v := range pets {
-		fmt.Printf("key=%v, value=%v\n", k, v)
+		fmt.Printf("  key=%v, value=%v\n", k, v)
 	}
 }

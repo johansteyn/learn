@@ -8,14 +8,14 @@ func main() {
 	fmt.Println("Arrays and Slices")
 	fmt.Println()
 
-  // Arrays
+	// Arrays
 	// All elements must be of the same type
 	// Must specify size, which cannot change (ie. size forms part of its type)
 	var powersOfTwo [10]int // Array of 10 integers, all with default nil values (zero)
 	fmt.Printf("powersOfTwo=%v (%T)\n", powersOfTwo, powersOfTwo)
 	powersOfTwo[0] = 2
 	for i := 1; i < len(powersOfTwo); i++ {
-		powersOfTwo[i] = 2 * powersOfTwo[i - 1]
+		powersOfTwo[i] = 2 * powersOfTwo[i-1]
 	}
 	fmt.Printf("powersOfTwo=%v (%T)\n", powersOfTwo, powersOfTwo)
 	fmt.Println()
@@ -49,25 +49,25 @@ func main() {
 	// A slice is similar to an array, but the size does not form part of its type
 	// Using [n] or [...] declares an array, while using [] declares a slice
 	// Since slices can grow and shrink, you can have an empty slice (but not an empty array).
-	var empty []int // Default nil value for a slice is... nil
-	fmt.Printf("empty=%v (%T)\n", empty, empty)
+	var nilSlice []int // Default nil value for a slice is... nil
+	fmt.Printf("nilSlice=%v (%T)\n", nilSlice, nilSlice)
 	// Go's nil is not quite like C or Java's null
 	// It's an identifier that represents the lack of a value.
 	// Like literals and untyped constants, nil has no type so can be assigned or compared to values of different types.
 	// Slices aren't comparable, ie. you can't use == or !=, but you can compare a slice to nil.
-	fmt.Printf("empty == nil? %t\n", empty == nil)
+	fmt.Printf("nilSlice == nil? %t\n", nilSlice == nil)
 	// Creating a slice using an empty slice literal results in an empty but non-nil slice
-	var nonNil = []int{}
-	fmt.Printf("nonNil=%v (%T)\n", nonNil, nonNil)
-	fmt.Printf("nonNil == nil? %t\n", nonNil == nil)
+	var empty = []int{}
+	fmt.Printf("empty=%v (%T)\n", empty, empty)
+	fmt.Printf("empty == nil? %t\n", empty == nil)
 	fmt.Println()
 
 	// Grow slices with the built-in "append" function
 	nonEmpty := append(empty, 1)
 	fmt.Printf("nonEmpty=%v (%T)\n", nonEmpty, nonEmpty)
 	// Appending three elements (can append any number)
-	nonNil = append(nonNil, 1, 2, 3)
-	fmt.Printf("nonNil=%v (%T)\n", nonNil, nonNil)
+	nonEmpty = append(nonEmpty, 2, 3, 4)
+	fmt.Printf("nonEmpty=%v (%T)\n", nonEmpty, nonEmpty)
 	var pets = []string{"Bruno", "Felix", "Fido"}
 	fmt.Printf("pets=%v (%T)\n", pets, pets)
 	pets = append(pets, "Koos", "Pluto", "Bernard", "Gizmo")
@@ -85,9 +85,9 @@ func main() {
 	fmt.Println()
 
 	// In addition to size (len), a slice also has capacity (cap)
+	fmt.Printf("len(nilSlice)=%d, cap(nilSlice)=%d\n", len(nilSlice), cap(nilSlice))
 	fmt.Printf("len(empty)=%d, cap(empty)=%d\n", len(empty), cap(empty))
 	fmt.Printf("len(nonEmpty)=%d, cap(nonEmpty)=%d\n", len(nonEmpty), cap(nonEmpty))
-	fmt.Printf("len(nonNil)=%d, cap(nonNil)=%d\n", len(nonNil), cap(nonNil))
 	fmt.Printf("len(pets)=%d, cap(pets)=%d\n", len(pets), cap(pets))
 	fmt.Printf("len(cats)=%d, cap(cats)=%d\n", len(cats), cap(cats))
 	fmt.Printf("len(semester1)=%d, cap(semester1)=%d\n", len(semester1), cap(semester1))
@@ -106,7 +106,7 @@ func main() {
 	for i := 0; i < 365; i++ {
 		daysOfYear[i] = i + 1
 	}
-	// Note that we didn't use "append" - we set values directly and the capacity remains at 365
+	// Note that we didn't use "append" - we assigned values directly and the capacity remains at 365
 	// Remember that append ALWAYS increase the size of a slice!
 	fmt.Printf("len(daysOfYear)=%d, cap(daysOfYear)=%d, daysOfYear=%v \n", len(daysOfYear), cap(daysOfYear), daysOfYear)
 	// Alternatively, we can make a slice with initial length zero but with known capacity, and then append
@@ -123,7 +123,7 @@ func main() {
 	fmt.Println()
 
 	// A slice expression creates a slice from a slice (similar to Python)
-	daysOfJanuary := daysOfYear[:31] // 31 days, from index 0 to 30
+	daysOfJanuary := daysOfYear[:31]    // 31 days, from index 0 to 30
 	daysOfFebruary := daysOfYear[31:59] // 28 days, from index 31 to 58
 	fmt.Printf("len(daysOfJanuary)=%d, cap(daysOfJanuary)=%d, daysOfJanuary=%v \n", len(daysOfJanuary), cap(daysOfJanuary), daysOfJanuary)
 	fmt.Printf("len(daysOfFebruary)=%d, cap(daysOfFebruary)=%d, daysOfFebruary=%v \n", len(daysOfFebruary), cap(daysOfFebruary), daysOfFebruary)
@@ -155,4 +155,9 @@ func main() {
 	copy(numbers[2:], numbers[:4])
 	fmt.Printf("numbers=%v\n", numbers)
 
+	// To iterate through a slice, use a for loop with "range"
+	fmt.Println("Iterating through a slice:")
+	for i, number := range numbers {
+		fmt.Printf(" #%d:%d\n", i, number)
+	}
 }

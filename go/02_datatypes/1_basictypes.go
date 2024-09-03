@@ -18,10 +18,10 @@ func main() {
 
 	// Integers
 	var i int // Default (nil) value is 0
-	fmt.Printf("i=%d (%T)\n", i, i)
-	var j int = 42  // Variable type follows variable name and is optional.
+	fmt.Printf("i=%d (%T) <= default (nil) value\n", i, i)
+	var j int = 42 // Variable type follows variable name and is optional.
 	fmt.Printf("j=%d (%T)\n", j, j)
-	var k int = math.MaxInt64 // On my MacBook an int is 64 bits 
+	var k int = math.MaxInt64 // On my MacBook an int is 64 bits
 	fmt.Printf("k=%d (%T)\n", k, k)
 	var i8 int8 = math.MaxInt8
 	fmt.Printf("i8=%d (%T)\n", i8, i8)
@@ -35,7 +35,7 @@ func main() {
 
 	// Unsigned Integers
 	var ui uint // Default (nil) value is 0
-	fmt.Printf("ui=%d (%T)\n", ui, ui)
+	fmt.Printf("ui=%d (%T) <= default (nil) value\n", ui, ui)
 	var ui8 uint8 = math.MaxUint8
 	fmt.Printf("ui8=%d (%T)\n", ui8, ui8)
 	var ui16 uint16 = math.MaxUint16
@@ -61,7 +61,7 @@ func main() {
 	// But note that it returns a pointer...
 	o := new(int)
 	fmt.Printf("o=%d (%T)\n", o, o)
-	fmt.Printf("*o=%d (%T)\n", *o, *o)
+	fmt.Printf("*o=%d (%T) <= default (nil) value\n", *o, *o)
 	// Note that the short declaration form does not work outside of functions
 	// For idiomatic Go, avoid the short declaration form:
 	// - When initializing a variable to its zero value
@@ -83,10 +83,10 @@ func main() {
 
 	// Float
 	var f float32 // Default nil value is 0.0
-	fmt.Printf("f=%f (%T)\n", f, f)
+	fmt.Printf("f=%f (%T) <= default (nil) value\n", f, f)
 	var f32 float32 = 6.03e23 // Can use lowercase 'e' or uppercase 'E'
 	fmt.Printf("f32=%f (%T)\n", f32, f32)
-	var f64 float64 = 6.03E23
+	var f64 float64 = 6.03e23
 	fmt.Printf("f64=%f (%T)\n", f64, f64)
 	fmt.Println()
 
@@ -94,7 +94,7 @@ func main() {
 
 	// Boolean
 	var b bool // Default nil value is false
-	fmt.Printf("b=%t (%T)\n", b, b)
+	fmt.Printf("b=%t (%T) <= default (nil) value\n", b, b)
 	bt := true
 	fmt.Printf("bt=%t (%T)\n", bt, bt)
 	bf := false
@@ -106,10 +106,14 @@ func main() {
 	// The rune type is an alias for int32
 	// Rune literals are surrounded by single quotes
 	var r rune // Default nil value is 0, which displays as an empty character
-	fmt.Printf("r=%c (%T)\n", r, r)
+	fmt.Printf("r=%c (%T) <= default (nil) value\n", r, r)
 	a := 'a'
 	fmt.Printf("a=%c (%T)\n", a, a)
-	ad := 97 // Decimal
+	// Hmmm... using a short declaration or var declaration without type results in teh type being 'int'
+	// Using a var declaration with type 'rune' results in the type being 'int32' (which is what 'rune' is)
+	//ad := 97 // Decimal
+	//var ad = 97 // Decimal
+	var ad rune = 97 // Decimal
 	fmt.Printf("ad=%c (%T)\n", ad, ad)
 	ao := '\141' // Octal
 	fmt.Printf("ao=%c (%T)\n", ao, ao)
@@ -170,13 +174,13 @@ func main() {
 
 	// Another way is using a declaration list
 	var (
-		l1 int
-		l2 int = 1234
-		l3 = 5678
-		l4 = "abc"
-		l5, l6 = 42, "def"
+		l1     int // Default (nil) value is 0
+		l2     int = 1234
+		l3         = 5678 // Type is optional (can be inferred)
+		l4         = "abc"
+		l5, l6     = 42, "def" // Can mix types
 	)
-	fmt.Printf("l1=%d (%T)\n", l1, l1)
+	fmt.Printf("l1=%d (%T) <= default (nil) value\n", l1, l1)
 	fmt.Printf("l2=%d (%T)\n", l2, l2)
 	fmt.Printf("l3=%d (%T)\n", l3, l3)
 	fmt.Printf("l4=%s (%T)\n", l4, l4)
@@ -210,14 +214,14 @@ func main() {
 	fmt.Printf("i16=%d (%T)\n", i16, i16)
 	fmt.Println()
 
-	// But note that literals (and constants) are untyped, 
+	// But note that literals (and constants) are untyped,
 	// which allows you to assign what looks like an int literal to a float
 	f = 123456
 	fmt.Printf("f=%f (%T)\n", f, f)
 	// Yet you still can't assign a float literal to an int
 	//i = 6.03e23 // Implicit conversion fails
 	//i = int(6.03e23) // Explicit conversion also fails (because the literal value overflows int)
-	// Even a smaller float literal that doesn't overflow cannot be assigned, since it results in truncation 
+	// Even a smaller float literal that doesn't overflow cannot be assigned, since it results in truncation
 	//i = 1.23
 	//i = int(1.23)
 	fmt.Println()
@@ -235,11 +239,11 @@ func main() {
 
 	// When assigned, the compiler will check that it can fit the type
 	// An untyped constant can be assigned to different typed variables:
-  var ci int = c
+	var ci int = c
 	fmt.Printf("ci=%d (%T)\n", ci, ci)
-  var cf float32 = c
+	var cf float32 = c
 	fmt.Printf("cf=%f (%T)\n", cf, cf)
-  var cb byte = c
+	var cb byte = c
 	fmt.Printf("cb=%d (%T)\n", cb, cb)
 	fmt.Println()
 
@@ -260,52 +264,53 @@ func main() {
 	// An untyped numeric constant is just a number with arbitrary precision
 	// That means it can hold a value larger than any type can hold, but when
 	// assigned to a variable or used as a parameter it needs to fit the type.
-	const novemdicillion = 1_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000
+	const novemdecillion = 1_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000
 	// The large constant can be declared but not assigned or printed,
 	// because it doesn't fit into any of the basic types
-	//assigned := novemdicillion 
-	//fmt.Printf("novemdicillion =%v (%T)\n", novemdicillion , novemdicillion )
+	//assigned := novemdecillion
+	//fmt.Printf("novemdecillion =%v (%T)\n", novemdecillion , novemdecillion )
 	// But it can be used in an expression - as long as the result of the expression can fit into a type
-	thousand := novemdicillion / (novemdicillion  / 1000)
+	thousand := novemdecillion / (novemdecillion / 1000)
 	fmt.Printf("thousand=%v (%T)\n", thousand, thousand)
 	fmt.Println()
 	// My own explanation:
-	// Constants and literals are processed at compile time
+	// Constants and literals are processed at compile time.
 	// The compiler can do arithmetic just fine on constant/literal values of any size
 	// as long as they are just constants or literals.
-	// But as soon as you want to assign a constant or literal to a variable,
-  // the compiler needs to know the type of the variable,
-	// since Go is a strongly types language,
-	// and that is where the constant/lietral needs to fit into a type.
+	// But as soon as you want to assign a constant or literal to a variable, the
+	// compiler needs to know the type of that variable (Go is strongly typed)
+	// and that is where the constant/literal needs to fit into a type.
 
 	// A typed constant ensures that only a value of that type can be assigned to it,
 	// whereas leaving a constant untyped provides us more flexibility
 	const tc int = 24
 	fmt.Printf("tc=%d (%T)\n", tc, tc)
-  var tci int = tc // Can assign the typed constant to an int variable
+	var tci int = tc // Can assign the typed constant to an int variable
 	fmt.Printf("tci=%d (%T)\n", tci, tci)
-  //var tcf float32 = tc // Cannot assign the typed constant to any non-int variable
+	//var tcf float32 = tc // Cannot assign the typed constant to any non-int variable
 	//fmt.Printf("tcf=%f (%T)\n", tcf, tcf)
 	fmt.Println()
 
 	// A group of constants can be declared in a single statement
 	const (
-		fullname = "Johan Frederik Steyn"	// String constant
-		year = 1967	// Numeric constant
-		gender = 'M'	// Character constant (actually, also a numeric)
-		vaccinated = true	// Boolean constant
-  )
+		fullname          = "Johan Frederik Steyn" // String constant
+		year              = 1967                   // Numeric constant
+		gender            = 'M'                    // Character constant (actually, also a numeric)
+		vaccinated        = true                   // Boolean constant
+		nickname   string = "Joda"                 // String typed constant
+	)
 	fmt.Printf("fullname=%v (%T)\n", fullname, fullname)
 	fmt.Printf("year=%v (%T)\n", year, year)
 	fmt.Printf("gender=%v (%T)\n", gender, gender)
 	fmt.Printf("vaccinated=%v (%T)\n", vaccinated, vaccinated)
+	fmt.Printf("nickname=%v (%T)\n", nickname, nickname)
 
 	// Cannot re-assign a value to a constant (obviously)
-	//c = 7 
+	//c = 7
 	// Cannot assign result of function call (value must be know at compile time)
 	//const two = math.Sqrt(4)
 	// Cannot declare a constant using :=
-	//const q := 7 
+	//const q := 7
 
 	// Unused variables are not allowed
 	//var unusedVar int = 36
@@ -317,4 +322,3 @@ func main() {
 	const MAX_TEMP = 100 // Don't use
 	const maxTemp = 100  // Rather use camelCase
 }
-
