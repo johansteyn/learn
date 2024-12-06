@@ -8,12 +8,18 @@ func main() {
 	fmt.Println("Pointers")
 	fmt.Println()
 
-	// Simple pointer to int
+	// Uninitialized pointer to int
+	var xptr *int
+	fmt.Printf("xptr=%v (%T)\n", xptr, xptr)
+	// Is equal to nil
+	fmt.Printf("xptr == nil? %v\n", xptr == nil)
+	// Cannot dereference a nil pointer
+	//fmt.Printf("*xptr=%v (%T)\n", *xptr, *xptr)
 	x := 7
 	fmt.Printf("x=%d (%T)\n", x, x)
-	xptr := &x // Address operator &
+	xptr = &x // Address operator &
 	fmt.Printf("xptr=%v (%T)\n", xptr, xptr)
-	i := *xptr // Indirection operator * (contents of)
+	i := *xptr // Indirection operator * (used to dereference)
 	fmt.Printf("*xptr=%v (%T)\n", *xptr, *xptr)
 	fmt.Printf("i=%d (%T)\n", i, i)
 	*xptr = 12 // Changing the contents of a pointer changes the original variable's value
@@ -25,14 +31,16 @@ func main() {
 	fmt.Printf("sptr=%v (%T)\n", sptr, sptr)
 	// Is equal to nil
 	fmt.Printf("sptr == nil? %v\n", sptr == nil)
-	// And cannot be dereferenced until it is assigned a value
+	// Cannot dereference a nil pointer
 	//fmt.Printf("*sptr=%v (%T)\n", *sptr, *sptr)
 	s := "The quick brown fox"
 	fmt.Printf("s=%s (%T)\n", s, s)
 	sptr = &s
 	fmt.Printf("sptr=%v (%T)\n", sptr, sptr)
 	fmt.Printf("*sptr=%v (%T)\n", *sptr, *sptr)
-	*sptr = "jumps over the lazy dog" // Again, changing the contents changes the original
+	*sptr = "jumps over the lazy dog"           // Again, changing the contents changes the original
+	fmt.Printf("sptr=%v (%T)\n", sptr, sptr)    // Still points to the same address
+	fmt.Printf("*sptr=%v (%T)\n", *sptr, *sptr) // But the contents have changed
 	fmt.Printf("s=%s (%T)\n", s, s)
 	fmt.Println()
 
@@ -63,10 +71,12 @@ func main() {
 	// Instead, assign the constant to a string variable and take its address
 	s = tobe
 	sptr = &s
+	fmt.Printf("sptr=%v (%T)\n", sptr, sptr)
 	fmt.Printf("*sptr=%v (%T)\n", *sptr, *sptr)
 	// Or use a function to obtain a pointer
 	sptr = stringp(tobe)
-	fmt.Printf("*sptr=%v (%T)\n", *sptr, *sptr)
+	fmt.Printf("sptr=%v (%T)\n", sptr, sptr)    // Points to a new address
+	fmt.Printf("*sptr=%v (%T)\n", *sptr, *sptr) // The original contents were copied to that new address
 	fmt.Println()
 
 	// Pass by value (copy)
@@ -143,8 +153,8 @@ func returnByReference() (*string, map[string]int) {
 }
 
 func returnByValue() (string, map[string]int) {
-	// Since complex types like arrays, slices and maps are always passed
-	// by reference, we need to return a separate copy for each call
+	// Complex types (arrays, slices and maps) are passed by reference
+	// So we need to return a separate copy for each call
 	var local_students = map[string]int{
 		"Alice": 21,
 		"Bob":   65,
