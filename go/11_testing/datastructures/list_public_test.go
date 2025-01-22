@@ -22,7 +22,7 @@ func TestPublicAdd(t *testing.T) {
 	expectedValue := 42
 	value, err := list.Get(0)
 	if err != nil {
-		t.Errorf("unexpected expected error")
+		t.Errorf("unexpected error")
 	}
 	if value != expectedValue {
 		t.Errorf("expected value %d but got %d\n", expectedValue, value)
