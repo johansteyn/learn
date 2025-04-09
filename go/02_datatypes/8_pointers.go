@@ -124,6 +124,39 @@ func main() {
 	fmt.Printf("name=%s\n", name)
 	fmt.Printf("students=%v\n", students)
 	fmt.Println()
+
+	alice := Person{
+		Name: "Alice",
+		Age:  21,
+		Address: Address{
+			Number: 42,
+			Street: "Monsonia Road",
+			City:   "Betty's Bay",
+		},
+	}
+	fmt.Printf("alice=%+v\n", alice)
+	// Does not change the person
+	modifyPersonByValue(alice)
+	fmt.Printf("alice=%+v\n", alice)
+	// Changes the person
+	modifyPersonByReference(&alice)
+	fmt.Printf("alice=%+v\n", alice)
+
+	bob := Person{
+		Name: "Bob",
+		Age:  64,
+		Address: Address{
+			Number: 42,
+			Street: "Merenksy Street",
+			City:   "Secunda",
+		},
+	}
+	people := People{alice, bob}
+	fmt.Printf("people=%+v\n", people)
+	resetPeople(people)
+	fmt.Printf("people=%+v\n", people)
+
+	fmt.Println()
 }
 
 // Utility function to obtain a pointer to a primitive
@@ -161,4 +194,46 @@ func returnByValue() (string, map[string]int) {
 		"Carol": 42,
 	}
 	return global_name, local_students
+}
+
+type Person struct {
+	Name    string
+	Age     int
+	Address Address
+}
+
+type Address struct {
+	Number int
+	Street string
+	City   string
+}
+
+func modifyPersonByValue(p Person) {
+	p.Address.Number = 5
+}
+
+func modifyPersonByReference(p *Person) {
+	p.Address.Number = 5
+}
+
+type People []Person
+
+// Slices (and arrays and maps) are passed by reference, so no need to use pointers
+func resetPeople(people People) {
+	// This has no effect on the original slice because each individual person obtained via "range" is a copy
+	//for _, person := range people {
+	//	person.Name = "Nobody"
+	//	person.Age = 0
+	//	person.Address.Number = 0
+	//	person.Address.Street = ""
+	//	person.Address.City = ""
+	//}
+	// So we need to use the index to modify the original slice
+	for i := range people {
+		people[i].Name = "Nobody"
+		people[i].Age = 0
+		people[i].Address.Number = 0
+		people[i].Address.Street = ""
+		people[i].Address.City = ""
+	}
 }
