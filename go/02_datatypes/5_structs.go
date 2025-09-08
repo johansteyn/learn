@@ -15,7 +15,7 @@ func main() {
 	// - Fields surrounded by braces
 	type person struct {
 		name string // Note that there are no commas between fields
-		age int
+		age  int
 	}
 
 	// To define a variable of that type
@@ -28,7 +28,7 @@ func main() {
 	fmt.Printf("bob=%v (%T)\n", bob, bob)
 	// Unlike slices and maps, there is no such thing as a nil struct
 	// ie. alice and bob are both empty - not nil
-	// So, we cannot compare alice or bob to nil 
+	// So, we cannot compare alice or bob to nil
 	//fmt.Printf("alice == nil? %t\n", alice == nil)
 	//fmt.Printf("bob == nil? %t\n", bob == nil)
 	// But we can compare alice and bob to each other
@@ -46,12 +46,12 @@ func main() {
 	fmt.Printf("dave=%v (%T)\n", dave, dave)
 	// Or any individual fields can be named in any order
 	edgar := person{
-		age: 18, // Note that here we do have commas
+		age:  18,      // Note that here we do have commas
 		name: "Edgar", // The last field also has a comma
 	}
 	fmt.Printf("edgar=%v (%T)\n", edgar, edgar)
 	fmt.Println()
-	
+
 	// Individual fields are accessed (set/get) using dot notation
 	alice.name = "Alice"
 	alice.age = 21
@@ -68,7 +68,7 @@ func main() {
 	// An anonymous struct does not use the "type" keyword
 	var frank struct {
 		name string
-		age int
+		age  int
 	}
 	frank.name = "Frank"
 	fmt.Printf("frank=%v (%T)\n", frank, frank)
@@ -84,7 +84,7 @@ func main() {
 		vaccinated bool
 	}
 	type employee struct {
-		title string
+		title  string
 		person // Note that person and status are embedded fields
 		status // Embedded fields don't need names - only types
 	}
@@ -107,7 +107,7 @@ func main() {
 	// But if two or more embedded structs have the same field...
 	type pet struct {
 		name string
-		age int
+		age  int
 	}
 	type student struct {
 		person
@@ -124,5 +124,23 @@ func main() {
 	fmt.Printf("headboy.person.age=%d\n", headboy.person.age)
 	fmt.Printf("headboy.pet.name=%s\n", headboy.pet.name)
 	fmt.Printf("headboy.pet.age=%d\n", headboy.pet.age)
+	fmt.Println()
 
+	// Field name can be the same as the names of types (though not recommended)
+	type PersonError struct {
+		msg    string
+		person person
+		error  error
+	}
+
+	error := PersonError{
+		msg:    "An error occurred",
+		person: person{"John", 30},
+		error:  fmt.Errorf("some error occurred"),
+	}
+	fmt.Printf("error.msg=%s\n", error.msg)
+	fmt.Printf("error.person.name=%s\n", error.person.name)
+	fmt.Printf("error.person.age=%d\n", error.person.age)
+	fmt.Printf("error.error=%v\n", error.error)
+	fmt.Println()
 }

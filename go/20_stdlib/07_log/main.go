@@ -41,7 +41,7 @@ func main() {
 	logger.SetOutput(file)
 	logger.Println("Default file logger's Println function.")
 
-	// Or create a custome logger that writes to a file and includes a prefix
+	// Or create a custom logger that writes to a file and includes a prefix
 	logger = log.New(file, "prefix: ", log.Ldate|log.Ltime|log.Lmsgprefix)
 	logger.Println("Custom file + prefix logger's Println function.")
 

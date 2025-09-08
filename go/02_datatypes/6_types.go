@@ -32,7 +32,22 @@ func main() {
 	}
 	fmt.Println()
 
-	// However, that's not what we really want...
+	var freezingCptr *celsius = &freezingC
+	var freezingFptr *fahrenheit = &freezingF
+
+	// Similarly, we cannot compare the contents of pointers to different types
+	//fmt.Println("*freezingCptr==freezingFptr? %t\n", *freezingCptr == *freezingFptr)
+
+	// And, again, we can do type conversion
+	var convertedFptr *fahrenheit = (*fahrenheit)(freezingCptr)
+	if *freezingFptr == *convertedFptr {
+		fmt.Printf("%d Fahrenheit == %d Celsius\n", *freezingFptr, *freezingCptr)
+	} else {
+		fmt.Printf("%d Fahrenheit != %d Celsius\n", *freezingFptr, *freezingCptr)
+	}
+	fmt.Println()
+
+	// However, in this case type conversion is not what we really want...
 	// We want to call a proper conversion function that calculates the correct value
 	var calculatedF = celsiusToFahrenheit(freezingC)
 	fmt.Printf("calculatedF = %d\n", calculatedF)
@@ -42,18 +57,41 @@ func main() {
 		fmt.Printf("%d Celsius != %d Fahrenheit\n", freezingF, freezingC)
 	}
 	fmt.Println()
+
+	/*
+		var c int = 100
+		var f int = 212
+		var cptr *int = &c
+		var fptr *int = &f
+		var boilingCPtr *celsius = (*celsius)(cptr)
+		var boilingFPtr *fahrenheit = (*fahrenheit)(fptr)
+		if *boilingCPtr == *boilingFPtr {
+			fmt.Printf("%d Celsius == %d Fahrenheit\n", *boilingCPtr, *boilingFPtr)
+		} else {
+			fmt.Printf("%d Celsius != %d Fahrenheit\n", *boilingCPtr, *boilingFPtr)
+		}
+
+		fmt.Printf("c = %d, *cptr = %d\n", c, *cptr)
+
+		// Works...
+		//var freezingCptr celsiusPtr = &c
+		//var freezingCptr celsiusPtr = cptr
+		//fmt.Printf("freezingCptr = %d\n", *freezingCptr)
+
+		var freezingCptr *celsius = (*celsius)(cptr)
+		fmt.Printf("freezingCptr = %d\n", *freezingCptr)
+	*/
 }
 
 type celsius int
 type fahrenheit int
 
 func celsiusToFahrenheit(c celsius) fahrenheit {
-	var x float32 = float32(c) * 9.0 / 5.0 + 32.0
+	var x float32 = float32(c)*9.0/5.0 + 32.0
 	return fahrenheit(x)
 }
 
-func fahrenheitToCelsius(f fahrenheit) celsius  {
+func fahrenheitToCelsius(f fahrenheit) celsius {
 	var x float32 = 5.0 / 9.0 * (float32(f) - 32.0)
 	return celsius(x)
 }
-

@@ -9,6 +9,7 @@ func main() {
 	fmt.Println()
 
 	// Arrays
+	fmt.Println("------------ Arrays ------------")
 	// All elements must be of the same type
 	// Must specify size, which cannot change (ie. size forms part of its type)
 	var powersOfTwo [10]int // Array of 10 integers, all with default nil values (zero)
@@ -46,6 +47,7 @@ func main() {
 	fmt.Println()
 
 	// Slices
+	fmt.Println("------------ Slices ------------")
 	// A slice is similar to an array, but the size does not form part of its type
 	// Using [n] or [...] declares an array, while using [] declares a slice
 	// Since slices can grow and shrink, you can have an empty slice (but not an empty array).
@@ -56,6 +58,16 @@ func main() {
 	// Like literals and untyped constants, nil has no type so can be assigned or compared to values of different types.
 	// Slices aren't comparable, ie. you can't use == or !=, but you can compare a slice to nil.
 	fmt.Printf("nilSlice == nil? %t\n", nilSlice == nil)
+
+	// With a nil slice you can get the length and capacity and iterate over it without getting a nil pointer exception
+	fmt.Println("Working with a nil slice...")
+	fmt.Printf("len(nilSlice)=%d, cap(nilSlice)=%d\n", len(nilSlice), cap(nilSlice))
+	for i, x := range nilSlice {
+		fmt.Printf("nilSlice[%d]=%d\n", i, x)
+	}
+	// But if you reference a nil slice you will get a runtime panic...
+	//fmt.Printf("nilSlice[0]: %d\n", nilSlice[0])
+
 	// Creating a slice using an empty slice literal results in an empty but non-nil slice
 	var empty = []int{}
 	fmt.Printf("empty=%v (%T)\n", empty, empty)

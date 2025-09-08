@@ -5,6 +5,10 @@ Done:
 - Queue
 - Stack
 - BinaryTree
+- Set
+  Uses a map of structs as per:
+  https://emersion.fr/blog/2017/sets-in-go
+	https://www.scaler.com/topics/golang/golang-set/
 
 Todo:
 - Generics (ie. not only ints)
